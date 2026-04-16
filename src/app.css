@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+
+/*
+  Tailwind v4 uses CSS-first configuration.
+  Dark mode is handled via the 'dark' class on <html>.
+  Custom utilities and overrides go here.
+*/
+
+/* Smooth scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background: var(--color-gray-300);
+	border-radius: 3px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+	background: var(--color-gray-700);
+}
+
+/* Custom border-width utility for loading spinners */
+.border-3 {
+	border-width: 3px;
+}
