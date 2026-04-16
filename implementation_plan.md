@@ -3,7 +3,6 @@
 ## Overview
 
 A SvelteKit web application connected to Firebase (Auth + Firestore) that allows bank managers to:
-
 - **Log in** with email/password
 - **View a scrollable list** of their clients with risk & value scores
 - **Filter clients** (filter options TBD)
@@ -14,14 +13,14 @@ A SvelteKit web application connected to Firebase (Auth + Firestore) that allows
 
 ## Tech Stack
 
-| Layer         | Technology                                                |
-| ------------- | --------------------------------------------------------- |
-| Framework     | SvelteKit (latest)                                        |
-| Language      | JavaScript                                                |
-| Styling       | Vanilla CSS with CSS custom properties (design tokens)    |
-| Auth          | Firebase Authentication (email/password)                  |
-| Database      | Cloud Firestore                                           |
-| Hosting       | Local dev (`npm run dev`) — deployment TBD                |
+| Layer | Technology |
+|-------|-----------|
+| Framework | SvelteKit (latest) |
+| Language | **TypeScript** |
+| Styling | **Tailwind CSS v4** |
+| Auth | Firebase Authentication (email/password) |
+| Database | Cloud Firestore |
+| Hosting | Local dev (`npm run dev`) — deployment TBD |
 | Retention API | External (built by another team — will be mocked for now) |
 
 ---
@@ -31,8 +30,51 @@ A SvelteKit web application connected to Firebase (Auth + Firestore) that allows
 > [!IMPORTANT]
 > All 3 team members MUST use these exact data structures. This is the "contract" that ensures your code connects.
 
-### Firestore: `managers` collection
+### TypeScript Interfaces — `src/lib/types.ts` (Person 1 creates this)
 
+```typescript
+// Manager document from Firestore 'managers' collection
+export interface Manager {
+  uid: string;
+  name: string;
+  email: string;
+  role: string;
+  branch: string;
+}
+
+// Client document from Firestore 'clients' collection
+export interface Client {
+  id: string;
+  managerId: string;
+  name: string;
+  riskScore: number;
+  riskExplanation: string;
+  valueScore: number;
+  valueExplanation: string;
+  email: string;
+  phone: string;
+  accountType: string;
+  joinDate: string;
+}
+
+// Retention method from external API
+export interface RetentionMethod {
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+}
+
+// Filter state
+export interface FilterState {
+  search: string;
+  riskMin: number;
+  riskMax: number;
+  valueMin: number;
+  valueMax: number;
+}
+```
+
+### Firestore: `managers` collection
 ```json
 {
   "uid": "firebase-auth-uid",
@@ -44,7 +86,6 @@ A SvelteKit web application connected to Firebase (Auth + Firestore) that allows
 ```
 
 ### Firestore: `clients` collection
-
 ```json
 {
   "id": "auto-generated",
@@ -62,7 +103,6 @@ A SvelteKit web application connected to Firebase (Auth + Firestore) that allows
 ```
 
 ### Retention API (mocked for now)
-
 ```
 GET /api/retention?clientId={id}
 
@@ -88,23 +128,26 @@ Response:
 fintech-hackathon/
 ├── package.json                          ← Person 1 (setup)
 ├── svelte.config.js                      ← Person 1 (setup)
-├── vite.config.js                        ← Person 1 (setup)
+├── vite.config.ts                        ← Person 1 (setup)
+├── tsconfig.json                         ← Person 1 (setup)
 ├── firebase.json                         ← Person 1
 │
 ├── src/
 │   ├── app.html                          ← Person 1 (setup)
-│   ├── app.css                           ← Person 3
+│   ├── app.css                           ← Person 3 (Tailwind + theme tokens)
 │   │
 │   ├── lib/
+│   │   ├── types.ts                      ← Person 1
+│   │   │
 │   │   ├── firebase/
-│   │   │   ├── config.js                 ← Person 1
-│   │   │   ├── auth.js                   ← Person 1
-│   │   │   └── firestore.js              ← Person 1
+│   │   │   ├── config.ts                 ← Person 1
+│   │   │   ├── auth.ts                   ← Person 1
+│   │   │   └── firestore.ts              ← Person 1
 │   │   │
 │   │   ├── stores/
-│   │   │   ├── authStore.js              ← Person 1
-│   │   │   ├── clientStore.js            ← Person 2
-│   │   │   └── themeStore.js             ← Person 3
+│   │   │   ├── authStore.ts              ← Person 1
+│   │   │   ├── clientStore.ts            ← Person 2
+│   │   │   └── themeStore.ts             ← Person 3
 │   │   │
 │   │   ├── components/
 │   │   │   ├── ClientCard.svelte         ← Person 2
@@ -118,11 +161,11 @@ fintech-hackathon/
 │   │   │   └── Navbar.svelte             ← Person 3
 │   │   │
 │   │   └── api/
-│   │       └── retention.js              ← Person 3
+│   │       └── retention.ts              ← Person 3
 │   │
 │   └── routes/
 │       ├── +layout.svelte                ← Person 3
-│       ├── +layout.js                    ← Person 1
+│       ├── +layout.ts                    ← Person 1
 │       ├── login/
 │       │   └── +page.svelte              ← Person 1
 │       ├── +page.svelte                  ← Person 2 (dashboard)
@@ -163,7 +206,7 @@ gantt
 
     section Person 3
     Wait for project init         :milestone, m2, 1, 0
-    Design system (app.css)       :p3a, 1, 3
+    Tailwind theme (app.css)      :p3a, 1, 3
     Layout + navbar + theme       :p3b, 3, 5
     Client detail page            :p3c, 5, 7
     Retention API + cards         :p3d, 7, 8
@@ -173,12 +216,12 @@ gantt
 
 ---
 
-## Person 1 — Firebase & Authentication
+## Person 1 — Firebase, Auth & Project Setup
 
 ### Responsibilities
-
-- Initialize the SvelteKit project
-- Set up Firebase project in Firebase Console
+- Initialize the SvelteKit project with TypeScript
+- Install Firebase + Tailwind CSS dependencies
+- Shared TypeScript interfaces
 - Firebase configuration, auth, and Firestore services
 - Auth store (reactive user state)
 - Login page UI
@@ -188,21 +231,34 @@ gantt
 ### Step-by-Step
 
 #### 1. Initialize Project (DO THIS FIRST — before anyone else starts)
-
 ```bash
 # In the repo root (fintech-hackathon/)
-npx -y sv create ./
-# Choose: SvelteKit minimal, JavaScript, no extras
+npx -y sv create ./ --template minimal --types ts
 
 npm install
 npm install firebase
+npm install tailwindcss @tailwindcss/vite
+
 git add .
-git commit -m "chore: initialize SvelteKit project with Firebase"
+git commit -m "chore: initialize SvelteKit project with TypeScript, Firebase, Tailwind"
 git push
 ```
 
-#### 2. Firebase Console Setup
+#### 2. Configure Tailwind in Vite — `vite.config.ts`
+```typescript
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
 
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    sveltekit()
+  ]
+});
+```
+
+#### 3. Firebase Console Setup
 1. Go to [console.firebase.google.com](https://console.firebase.google.com)
 2. Create a new project (e.g., "fintech-hackathon")
 3. **Enable Authentication** → Sign-in method → Email/Password → Enable
@@ -210,14 +266,15 @@ git push
 5. **Create test manager account** in Auth → Users → Add User
 6. **Copy your Firebase config** from Project Settings → Your Apps → Web App
 
-#### 3. Files to Create
+#### 4. Files to Create
 
-**`src/lib/firebase/config.js`** — Firebase initialization
+**`src/lib/types.ts`** — Shared TypeScript interfaces (see Data Models section above)
 
-```javascript
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+**`src/lib/firebase/config.ts`** — Firebase initialization
+```typescript
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
@@ -225,7 +282,7 @@ const firebaseConfig = {
   projectId: "YOUR_PROJECT_ID",
   storageBucket: "YOUR_PROJECT.appspot.com",
   messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -233,76 +290,74 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 ```
 
-**`src/lib/firebase/auth.js`** — Auth helper functions
-
-```javascript
-import { auth } from "./config.js";
+**`src/lib/firebase/auth.ts`** — Auth helper functions
+```typescript
+import { auth } from './config';
 import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-} from "firebase/auth";
+  type User
+} from 'firebase/auth';
 
-export async function login(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
+export async function login(email: string, password: string): Promise<void> {
+  await signInWithEmailAndPassword(auth, email, password);
 }
 
-export async function logout() {
-  return signOut(auth);
+export async function logout(): Promise<void> {
+  await signOut(auth);
 }
 
-export function onAuthChange(callback) {
+export function onAuthChange(callback: (user: User | null) => void): () => void {
   return onAuthStateChanged(auth, callback);
 }
 ```
 
-**`src/lib/firebase/firestore.js`** — Firestore data access
-
-```javascript
-import { db } from "./config.js";
+**`src/lib/firebase/firestore.ts`** — Firestore data access
+```typescript
+import { db } from './config';
 import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+  collection, query, where, getDocs, doc, getDoc
+} from 'firebase/firestore';
+import type { Manager, Client } from '$lib/types';
 
-export async function getManager(uid) {
-  const docRef = doc(db, "managers", uid);
+export async function getManager(uid: string): Promise<Manager | null> {
+  const docRef = doc(db, 'managers', uid);
   const docSnap = await getDoc(docRef);
-  return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
+  if (!docSnap.exists()) return null;
+  return { uid: docSnap.id, ...docSnap.data() } as Manager;
 }
 
-export async function getClientsByManager(managerId) {
+export async function getClientsByManager(managerId: string): Promise<Client[]> {
   const q = query(
-    collection(db, "clients"),
-    where("managerId", "==", managerId),
+    collection(db, 'clients'),
+    where('managerId', '==', managerId)
   );
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  return snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Client);
 }
 
-export async function getClient(clientId) {
-  const docRef = doc(db, "clients", clientId);
+export async function getClient(clientId: string): Promise<Client | null> {
+  const docRef = doc(db, 'clients', clientId);
   const docSnap = await getDoc(docRef);
-  return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
+  if (!docSnap.exists()) return null;
+  return { id: docSnap.id, ...docSnap.data() } as Client;
 }
 ```
 
-**`src/lib/stores/authStore.js`** — Reactive auth state
+**`src/lib/stores/authStore.ts`** — Reactive auth state
+```typescript
+import { writable } from 'svelte/store';
+import { onAuthChange } from '$lib/firebase/auth';
+import { getManager } from '$lib/firebase/firestore';
+import type { User } from 'firebase/auth';
+import type { Manager } from '$lib/types';
 
-```javascript
-import { writable } from "svelte/store";
-import { onAuthChange } from "$lib/firebase/auth.js";
-import { getManager } from "$lib/firebase/firestore.js";
+export const user = writable<User | null>(null);
+export const manager = writable<Manager | null>(null);
+export const authLoading = writable<boolean>(true);
 
-export const user = writable(null); // Firebase auth user
-export const manager = writable(null); // Manager profile from Firestore
-export const authLoading = writable(true); // Loading state
-
-onAuthChange(async (firebaseUser) => {
+onAuthChange(async (firebaseUser: User | null) => {
   if (firebaseUser) {
     user.set(firebaseUser);
     const mgr = await getManager(firebaseUser.uid);
@@ -315,29 +370,26 @@ onAuthChange(async (firebaseUser) => {
 });
 ```
 
-**`src/routes/+layout.js`** — Disable SSR (Firebase is client-side only)
-
-```javascript
+**`src/routes/+layout.ts`** — Disable SSR (Firebase is client-side only)
+```typescript
 export const ssr = false;
 ```
 
 **`src/routes/login/+page.svelte`** — Login page
-
 ```svelte
-<script>
-  import { login } from '$lib/firebase/auth.js';
-  import { user } from '$lib/stores/authStore.js';
+<script lang="ts">
+  import { login } from '$lib/firebase/auth';
+  import { user } from '$lib/stores/authStore';
   import { goto } from '$app/navigation';
 
-  let email = '';
-  let password = '';
-  let error = '';
-  let loading = false;
+  let email: string = '';
+  let password: string = '';
+  let error: string = '';
+  let loading: boolean = false;
 
-  // Redirect if already logged in
   $: if ($user) goto('/');
 
-  async function handleLogin() {
+  async function handleLogin(): Promise<void> {
     error = '';
     loading = true;
     try {
@@ -351,146 +403,58 @@ export const ssr = false;
   }
 </script>
 
-<div class="login-container">
-  <div class="login-card">
-    <h1>Welcome Back</h1>
-    <p class="subtitle">Sign in to your manager dashboard</p>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-4 transition-colors">
+  <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-10 w-full max-w-md shadow-lg">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Welcome Back</h1>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Sign in to your manager dashboard</p>
 
     {#if error}
-      <div class="error-message">{error}</div>
+      <div class="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg mb-4 text-sm">
+        {error}
+      </div>
     {/if}
 
-    <form on:submit|preventDefault={handleLogin}>
-      <div class="form-group">
-        <label for="email">Email</label>
+    <form on:submit|preventDefault={handleLogin} class="space-y-5">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
         <input
           id="email"
           type="email"
           bind:value={email}
           placeholder="manager@bank.com"
           required
+          class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
         />
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Password</label>
         <input
           id="password"
           type="password"
           bind:value={password}
           placeholder="••••••••"
           required
+          class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
         />
       </div>
 
-      <button type="submit" class="btn-primary" disabled={loading}>
+      <button
+        type="submit"
+        disabled={loading}
+        class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0"
+      >
         {loading ? 'Signing in...' : 'Sign In'}
       </button>
     </form>
   </div>
 </div>
-
-<style>
-  .login-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-primary);
-    padding: 1rem;
-  }
-
-  .login-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: var(--shadow-lg);
-  }
-
-  h1 {
-    margin: 0 0 0.25rem;
-    font-size: 1.75rem;
-    color: var(--text-primary);
-  }
-
-  .subtitle {
-    color: var(--text-secondary);
-    margin: 0 0 1.5rem;
-  }
-
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-
-  label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    margin-bottom: 0.375rem;
-  }
-
-  input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg-input);
-    color: var(--text-primary);
-    font-size: 1rem;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-  }
-
-  input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-  }
-
-  .btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 10px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .error-message {
-    background: var(--danger-bg);
-    color: var(--danger);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-  }
-</style>
 ```
 
-#### 4. Seed Firestore with Sample Data
-
-Go to Firebase Console → Firestore → manually add, or use a script:
+#### 5. Seed Firestore with Sample Data
+Go to Firebase Console → Firestore → manually add:
 
 **`managers` collection** — Create a doc with ID = the Auth UID of the test user:
-
 ```
 Document ID: {copy from Auth → Users → UID}
 Fields:
@@ -501,7 +465,6 @@ Fields:
 ```
 
 **`clients` collection** — Add 5–10 sample clients:
-
 ```
 Document ID: auto
 Fields:
@@ -522,7 +485,6 @@ Fields:
 ## Person 2 — Dashboard & Client List
 
 ### Responsibilities
-
 - Dashboard page layout (main page after login)
 - Scrollable client list
 - Client card component (shows name, risk score, value score)
@@ -532,28 +494,27 @@ Fields:
 
 ### Files to Create
 
-**`src/lib/stores/clientStore.js`** — Client state management
+**`src/lib/stores/clientStore.ts`** — Client state management
+```typescript
+import { writable, derived } from 'svelte/store';
+import { getClientsByManager } from '$lib/firebase/firestore';
+import type { Client, FilterState } from '$lib/types';
 
-```javascript
-import { writable, derived } from "svelte/store";
-import { getClientsByManager } from "$lib/firebase/firestore.js";
-
-export const clients = writable([]);
-export const clientsLoading = writable(false);
-export const filters = writable({
-  search: "",
+export const clients = writable<Client[]>([]);
+export const clientsLoading = writable<boolean>(false);
+export const filters = writable<FilterState>({
+  search: '',
   riskMin: 0,
   riskMax: 100,
   valueMin: 0,
   valueMax: 100,
-  // more filters can be added later
 });
 
 // Derived store: filtered clients
 export const filteredClients = derived(
   [clients, filters],
-  ([$clients, $filters]) => {
-    return $clients.filter((client) => {
+  ([$clients, $filters]: [Client[], FilterState]) => {
+    return $clients.filter((client: Client) => {
       const matchesSearch = client.name
         .toLowerCase()
         .includes($filters.search.toLowerCase());
@@ -565,16 +526,16 @@ export const filteredClients = derived(
         client.valueScore <= $filters.valueMax;
       return matchesSearch && matchesRisk && matchesValue;
     });
-  },
+  }
 );
 
-export async function loadClients(managerId) {
+export async function loadClients(managerId: string): Promise<void> {
   clientsLoading.set(true);
   try {
     const data = await getClientsByManager(managerId);
     clients.set(data);
   } catch (err) {
-    console.error("Failed to load clients:", err);
+    console.error('Failed to load clients:', err);
   } finally {
     clientsLoading.set(false);
   }
@@ -582,314 +543,117 @@ export async function loadClients(managerId) {
 ```
 
 **`src/lib/components/ClientCard.svelte`** — Individual client row
-
 ```svelte
-<script>
+<script lang="ts">
   import ScoreBadge from './ScoreBadge.svelte';
-  export let client;
+  import type { Client } from '$lib/types';
+
+  export let client: Client;
 </script>
 
-<a href="/client/{client.id}" class="client-card" id="client-{client.id}">
-  <div class="client-info">
-    <div class="client-avatar">
+<a
+  href="/client/{client.id}"
+  id="client-{client.id}"
+  class="flex items-center justify-between p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl cursor-pointer transition-all hover:border-indigo-500 hover:shadow-md hover:-translate-y-0.5 no-underline text-inherit"
+>
+  <div class="flex items-center gap-3">
+    <div class="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0">
       {client.name.charAt(0).toUpperCase()}
     </div>
-    <div class="client-details">
-      <span class="client-name">{client.name}</span>
-      <span class="client-account">{client.accountType}</span>
+    <div class="flex flex-col">
+      <span class="font-semibold text-gray-900 dark:text-gray-100">{client.name}</span>
+      <span class="text-xs text-gray-400 dark:text-gray-500">{client.accountType}</span>
     </div>
   </div>
-  <div class="client-scores">
+  <div class="flex gap-3">
     <ScoreBadge label="Risk" score={client.riskScore} type="risk" />
     <ScoreBadge label="Value" score={client.valueScore} type="value" />
   </div>
 </a>
-
-<style>
-  .client-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.25rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .client-card:hover {
-    border-color: var(--accent);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .client-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .client-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--accent-subtle);
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-
-  .client-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .client-name {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .client-account {
-    font-size: 0.8rem;
-    color: var(--text-tertiary);
-  }
-
-  .client-scores {
-    display: flex;
-    gap: 0.75rem;
-  }
-</style>
 ```
 
 **`src/lib/components/ClientList.svelte`** — Scrollable client list
-
 ```svelte
-<script>
+<script lang="ts">
   import ClientCard from './ClientCard.svelte';
-  import { filteredClients, clientsLoading } from '$lib/stores/clientStore.js';
+  import { filteredClients, clientsLoading } from '$lib/stores/clientStore';
 </script>
 
-<div class="client-list-container" id="client-list">
-  <div class="list-header">
-    <h2>Clients</h2>
-    <span class="client-count">{$filteredClients.length} clients</span>
+<div class="flex-1 flex flex-col min-h-0" id="client-list">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Clients</h2>
+    <span class="text-sm text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+      {$filteredClients.length} clients
+    </span>
   </div>
 
   {#if $clientsLoading}
-    <div class="loading-state">
-      <div class="spinner"></div>
+    <div class="text-center py-12 text-gray-400">
+      <div class="w-8 h-8 border-3 border-gray-200 dark:border-gray-700 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4"></div>
       <p>Loading clients...</p>
     </div>
   {:else if $filteredClients.length === 0}
-    <div class="empty-state">
+    <div class="text-center py-12 text-gray-400">
       <p>No clients match your filters</p>
     </div>
   {:else}
-    <div class="client-scroll">
+    <div class="flex-1 overflow-y-auto flex flex-col gap-2 pr-1 scrollbar-thin">
       {#each $filteredClients as client (client.id)}
         <ClientCard {client} />
       {/each}
     </div>
   {/if}
 </div>
-
-<style>
-  .client-list-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .list-header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    color: var(--text-primary);
-  }
-
-  .client-count {
-    font-size: 0.85rem;
-    color: var(--text-tertiary);
-    background: var(--bg-secondary);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-  }
-
-  .client-scroll {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-right: 0.25rem;
-  }
-
-  .client-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .client-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .client-scroll::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-  }
-
-  .loading-state, .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-tertiary);
-  }
-
-  .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 1rem;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-</style>
 ```
 
 **`src/lib/components/ManagerProfile.svelte`** — Manager info panel
-
 ```svelte
-<script>
-  import { manager } from '$lib/stores/authStore.js';
-  import { logout } from '$lib/firebase/auth.js';
+<script lang="ts">
+  import { manager } from '$lib/stores/authStore';
+  import { logout } from '$lib/firebase/auth';
   import { goto } from '$app/navigation';
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     await logout();
     goto('/login');
   }
 </script>
 
-<div class="profile-card" id="manager-profile">
+<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5" id="manager-profile">
   {#if $manager}
-    <div class="profile-header">
-      <div class="profile-avatar">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center font-bold text-xl shrink-0">
         {$manager.name?.charAt(0).toUpperCase() ?? '?'}
       </div>
-      <div class="profile-info">
-        <span class="profile-name">{$manager.name}</span>
-        <span class="profile-role">{$manager.role}</span>
-        <span class="profile-branch">{$manager.branch}</span>
+      <div class="flex flex-col">
+        <span class="font-bold text-gray-900 dark:text-gray-100">{$manager.name}</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">{$manager.role}</span>
+        <span class="text-xs text-gray-400 dark:text-gray-500">{$manager.branch}</span>
       </div>
     </div>
-    <button class="btn-logout" on:click={handleLogout}>Sign Out</button>
+    <button
+      on:click={handleLogout}
+      class="w-full py-2 bg-transparent border border-gray-200 dark:border-gray-700 rounded-lg text-gray-500 text-sm cursor-pointer transition-all hover:border-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+    >
+      Sign Out
+    </button>
   {:else}
-    <p class="loading-text">Loading profile...</p>
+    <p class="text-gray-400 text-center">Loading profile...</p>
   {/if}
 </div>
-
-<style>
-  .profile-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-  }
-
-  .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-
-  .profile-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.25rem;
-    flex-shrink: 0;
-  }
-
-  .profile-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .profile-name {
-    font-weight: 700;
-    color: var(--text-primary);
-    font-size: 1rem;
-  }
-
-  .profile-role {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-
-  .profile-branch {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-  }
-
-  .btn-logout {
-    width: 100%;
-    padding: 0.5rem;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-logout:hover {
-    border-color: var(--danger);
-    color: var(--danger);
-    background: var(--danger-bg);
-  }
-
-  .loading-text {
-    color: var(--text-tertiary);
-    text-align: center;
-  }
-</style>
 ```
 
 **`src/lib/components/FilterPanel.svelte`** — Filter controls
-
 ```svelte
-<script>
-  import { filters } from '$lib/stores/clientStore.js';
+<script lang="ts">
+  import { filters } from '$lib/stores/clientStore';
+  import type { FilterState } from '$lib/types';
 
-  function updateFilter(key, value) {
-    filters.update(f => ({ ...f, [key]: value }));
+  function updateFilter<K extends keyof FilterState>(key: K, value: FilterState[K]): void {
+    filters.update((f: FilterState) => ({ ...f, [key]: value }));
   }
 
-  function resetFilters() {
+  function resetFilters(): void {
     filters.set({
       search: '',
       riskMin: 0,
@@ -900,261 +664,113 @@ export async function loadClients(managerId) {
   }
 </script>
 
-<div class="filter-panel" id="filter-panel">
-  <div class="filter-header">
-    <h3>Filters</h3>
-    <button class="btn-reset" on:click={resetFilters}>Reset</button>
+<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5" id="filter-panel">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Filters</h3>
+    <button on:click={resetFilters} class="bg-transparent border-none text-indigo-500 text-xs font-medium cursor-pointer hover:underline">
+      Reset
+    </button>
   </div>
 
-  <div class="filter-group">
-    <label for="search-filter">Search</label>
+  <!-- Search -->
+  <div class="mb-4">
+    <label for="search-filter" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Search</label>
     <input
       id="search-filter"
       type="text"
       placeholder="Client name..."
       value={$filters.search}
-      on:input={(e) => updateFilter('search', e.target.value)}
+      on:input={(e) => updateFilter('search', (e.target as HTMLInputElement).value)}
+      class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm placeholder-gray-400 focus:outline-none focus:border-indigo-500 transition"
     />
   </div>
 
-  <div class="filter-group">
-    <label>Risk Score Range</label>
-    <div class="range-row">
+  <!-- Risk Score Range -->
+  <div class="mb-4">
+    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Risk Score Range</label>
+    <div class="flex items-center gap-2">
       <input
         id="risk-min"
         type="number" min="0" max="100"
         value={$filters.riskMin}
-        on:input={(e) => updateFilter('riskMin', +e.target.value)}
+        on:input={(e) => updateFilter('riskMin', +(e.target as HTMLInputElement).value)}
+        class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
       />
-      <span class="range-sep">—</span>
+      <span class="text-gray-400">—</span>
       <input
         id="risk-max"
         type="number" min="0" max="100"
         value={$filters.riskMax}
-        on:input={(e) => updateFilter('riskMax', +e.target.value)}
+        on:input={(e) => updateFilter('riskMax', +(e.target as HTMLInputElement).value)}
+        class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
       />
     </div>
   </div>
 
-  <div class="filter-group">
-    <label>Value Score Range</label>
-    <div class="range-row">
+  <!-- Value Score Range -->
+  <div class="mb-4">
+    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Value Score Range</label>
+    <div class="flex items-center gap-2">
       <input
         id="value-min"
         type="number" min="0" max="100"
         value={$filters.valueMin}
-        on:input={(e) => updateFilter('valueMin', +e.target.value)}
+        on:input={(e) => updateFilter('valueMin', +(e.target as HTMLInputElement).value)}
+        class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
       />
-      <span class="range-sep">—</span>
+      <span class="text-gray-400">—</span>
       <input
         id="value-max"
         type="number" min="0" max="100"
         value={$filters.valueMax}
-        on:input={(e) => updateFilter('valueMax', +e.target.value)}
+        on:input={(e) => updateFilter('valueMax', +(e.target as HTMLInputElement).value)}
+        class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
       />
     </div>
   </div>
 
   <!-- MORE FILTERS WILL BE ADDED HERE LATER -->
 </div>
-
-<style>
-  .filter-panel {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-  }
-
-  .filter-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .filter-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--text-primary);
-  }
-
-  .btn-reset {
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-weight: 500;
-  }
-
-  .btn-reset:hover {
-    text-decoration: underline;
-  }
-
-  .filter-group {
-    margin-bottom: 1rem;
-  }
-
-  .filter-group label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    margin-bottom: 0.375rem;
-  }
-
-  .filter-group input[type="text"] {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 0.875rem;
-    box-sizing: border-box;
-  }
-
-  .filter-group input[type="text"]:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-
-  .range-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .range-row input {
-    flex: 1;
-    padding: 0.5rem;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 0.85rem;
-    text-align: center;
-  }
-
-  .range-row input:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-
-  .range-sep {
-    color: var(--text-tertiary);
-  }
-</style>
 ```
 
 **`src/lib/components/Sidebar.svelte`** — Right sidebar layout
-
 ```svelte
-<script>
+<script lang="ts">
   import ManagerProfile from './ManagerProfile.svelte';
   import FilterPanel from './FilterPanel.svelte';
 </script>
 
-<aside class="sidebar" id="sidebar">
+<aside class="w-80 shrink-0 flex flex-col gap-4 h-full overflow-y-auto max-md:w-full" id="sidebar">
   <ManagerProfile />
   <FilterPanel />
 </aside>
-
-<style>
-  .sidebar {
-    width: 320px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    height: 100%;
-    overflow-y: auto;
-  }
-
-  @media (max-width: 900px) {
-    .sidebar {
-      width: 100%;
-    }
-  }
-</style>
 ```
 
 **`src/routes/+page.svelte`** — Dashboard (main page)
-
 ```svelte
-<script>
-  import { onMount } from 'svelte';
-  import { user, authLoading } from '$lib/stores/authStore.js';
-  import { loadClients } from '$lib/stores/clientStore.js';
+<script lang="ts">
+  import { user, authLoading } from '$lib/stores/authStore';
+  import { loadClients } from '$lib/stores/clientStore';
   import { goto } from '$app/navigation';
   import ClientList from '$lib/components/ClientList.svelte';
   import Sidebar from '$lib/components/Sidebar.svelte';
 
-  // Redirect to login if not authenticated
   $: if (!$authLoading && !$user) goto('/login');
-
-  // Load clients when user is available
   $: if ($user) loadClients($user.uid);
 </script>
 
 {#if $authLoading}
-  <div class="page-loading">
-    <div class="spinner"></div>
+  <div class="flex justify-center items-center h-screen">
+    <div class="w-10 h-10 border-3 border-gray-200 dark:border-gray-700 border-t-indigo-500 rounded-full animate-spin"></div>
   </div>
 {:else if $user}
-  <div class="dashboard" id="dashboard">
-    <main class="dashboard-main">
+  <div class="flex gap-6 p-6 h-[calc(100vh-64px)] max-w-7xl mx-auto max-md:flex-col-reverse max-md:h-auto" id="dashboard">
+    <main class="flex-1 flex flex-col min-w-0">
       <ClientList />
     </main>
     <Sidebar />
   </div>
 {/if}
-
-<style>
-  .dashboard {
-    display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    height: calc(100vh - 64px); /* subtract navbar height */
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .dashboard-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .page-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  @media (max-width: 900px) {
-    .dashboard {
-      flex-direction: column-reverse;
-      height: auto;
-    }
-  }
-</style>
 ```
 
 ---
@@ -1162,10 +778,9 @@ export async function loadClients(managerId) {
 ## Person 3 — Design System, Layout, Client Detail & Theme
 
 ### Responsibilities
-
-- Global CSS design system (all design tokens, light/dark themes)
+- Tailwind CSS setup with custom theme tokens (`app.css`)
 - Root layout with navbar
-- Theme toggle component
+- Theme toggle component (light/dark)
 - Score badge component (reused by Person 2)
 - Client detail page
 - Retention API integration (mocked)
@@ -1173,150 +788,73 @@ export async function loadClients(managerId) {
 
 ### Files to Create
 
-**`src/app.css`** — Global design system
-
+**`src/app.css`** — Tailwind import + custom utilities
 ```css
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import 'tailwindcss';
 
-/* ===== LIGHT THEME (default) ===== */
-:root {
-  --bg-primary: #f8f9fb;
-  --bg-secondary: #f0f1f5;
-  --bg-card: #ffffff;
-  --bg-input: #f4f5f7;
+/*
+  Tailwind v4 uses CSS-first configuration.
+  Dark mode is handled via the 'dark' class on <html>.
+  Custom utilities and overrides go here.
+*/
 
-  --text-primary: #1a1d26;
-  --text-secondary: #5a607a;
-  --text-tertiary: #9096ad;
-
-  --border: #e2e4ea;
-
-  --accent: #4f6ef7;
-  --accent-dark: #3b54c4;
-  --accent-subtle: #eef1fe;
-  --accent-glow: rgba(79, 110, 247, 0.15);
-
-  --danger: #e5484d;
-  --danger-bg: rgba(229, 72, 77, 0.08);
-
-  --success: #30a46c;
-  --success-bg: rgba(48, 164, 108, 0.08);
-
-  --warning: #f5a623;
-  --warning-bg: rgba(245, 166, 35, 0.08);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-
-  --navbar-height: 64px;
-}
-
-/* ===== DARK THEME ===== */
-[data-theme="dark"] {
-  --bg-primary: #0f1117;
-  --bg-secondary: #1a1d28;
-  --bg-card: #1e2130;
-  --bg-input: #262938;
-
-  --text-primary: #edeef3;
-  --text-secondary: #9096ad;
-  --text-tertiary: #5a607a;
-
-  --border: #2e3245;
-
-  --accent: #6b8aff;
-  --accent-dark: #4f6ef7;
-  --accent-subtle: rgba(107, 138, 255, 0.1);
-  --accent-glow: rgba(107, 138, 255, 0.2);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-/* ===== RESET & BASE ===== */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* ===== SCROLLBAR (global) ===== */
-::-webkit-scrollbar {
+/* Smooth scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
-::-webkit-scrollbar-track {
+.scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--border);
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
   border-radius: 3px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-gray-700);
+}
+
+/* Custom border-width utility for loading spinners */
+.border-3 {
+  border-width: 3px;
 }
 ```
 
-**`src/lib/stores/themeStore.js`** — Theme toggle state
+**`src/lib/stores/themeStore.ts`** — Theme toggle state
+```typescript
+import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 
-```javascript
-import { writable } from "svelte/store";
-import { browser } from "$app/environment";
+const stored: string | null = browser ? localStorage.getItem('theme') : null;
+export const theme = writable<'light' | 'dark'>((stored as 'light' | 'dark') || 'light');
 
-const stored = browser ? localStorage.getItem("theme") : null;
-export const theme = writable(stored || "light");
-
-theme.subscribe((value) => {
+theme.subscribe((value: string) => {
   if (browser) {
-    document.documentElement.setAttribute("data-theme", value);
-    localStorage.setItem("theme", value);
+    if (value === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', value);
   }
 });
 
-export function toggleTheme() {
-  theme.update((t) => (t === "light" ? "dark" : "light"));
+export function toggleTheme(): void {
+  theme.update((t: string) => (t === 'light' ? 'dark' : 'light'));
 }
 ```
 
 **`src/lib/components/ThemeToggle.svelte`** — Light/dark switch
-
 ```svelte
-<script>
-  import { theme, toggleTheme } from '$lib/stores/themeStore.js';
+<script lang="ts">
+  import { theme, toggleTheme } from '$lib/stores/themeStore';
 </script>
 
 <button
-  class="theme-toggle"
   id="theme-toggle"
   on:click={toggleTheme}
   aria-label="Toggle theme"
   title={$theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+  class="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer text-gray-500 dark:text-gray-400 transition-all hover:border-indigo-500 hover:text-indigo-500"
 >
   {#if $theme === 'light'}
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1336,137 +874,52 @@ export function toggleTheme() {
     </svg>
   {/if}
 </button>
-
-<style>
-  .theme-toggle {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--text-secondary);
-    transition: all 0.2s;
-  }
-
-  .theme-toggle:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-</style>
 ```
 
 **`src/lib/components/ScoreBadge.svelte`** — Reusable score indicator
-
 ```svelte
-<script>
-  export let label = '';
-  export let score = 0;
-  export let type = 'risk'; // 'risk' or 'value'
+<script lang="ts">
+  export let label: string = '';
+  export let score: number = 0;
+  export let type: 'risk' | 'value' = 'risk';
 
-  $: color = type === 'risk'
-    ? (score >= 70 ? 'var(--danger)' : score >= 40 ? 'var(--warning)' : 'var(--success)')
-    : (score >= 70 ? 'var(--success)' : score >= 40 ? 'var(--warning)' : 'var(--danger)');
-
-  $: bgColor = type === 'risk'
-    ? (score >= 70 ? 'var(--danger-bg)' : score >= 40 ? 'var(--warning-bg)' : 'var(--success-bg)')
-    : (score >= 70 ? 'var(--success-bg)' : score >= 40 ? 'var(--warning-bg)' : 'var(--danger-bg)');
+  // Risk: high = red (bad), low = green (good)
+  // Value: high = green (good), low = red (bad)
+  $: colorClass = type === 'risk'
+    ? (score >= 70 ? 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950'
+      : score >= 40 ? 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950'
+      : 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950')
+    : (score >= 70 ? 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950'
+      : score >= 40 ? 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950'
+      : 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950');
 </script>
 
-<div class="badge" style="color: {color}; background: {bgColor};">
-  <span class="badge-label">{label}</span>
-  <span class="badge-score">{score}</span>
+<div class="flex flex-col items-center px-3 py-1.5 rounded-xl min-w-14 {colorClass}">
+  <span class="text-[0.65rem] font-medium uppercase tracking-wide opacity-85">{label}</span>
+  <span class="text-lg font-bold">{score}</span>
 </div>
-
-<style>
-  .badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.375rem 0.75rem;
-    border-radius: 10px;
-    min-width: 56px;
-  }
-
-  .badge-label {
-    font-size: 0.65rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    opacity: 0.85;
-  }
-
-  .badge-score {
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-</style>
 ```
 
 **`src/lib/components/Navbar.svelte`** — Top navigation bar
-
 ```svelte
-<script>
+<script lang="ts">
   import ThemeToggle from './ThemeToggle.svelte';
 </script>
 
-<nav class="navbar" id="navbar">
-  <div class="navbar-inner">
-    <a href="/" class="navbar-brand">
-      <span class="brand-icon">🏦</span>
-      <span class="brand-text">ClientGuard</span>
+<nav class="h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50" id="navbar">
+  <div class="max-w-7xl mx-auto h-full flex items-center justify-between px-6">
+    <a href="/" class="flex items-center gap-2 no-underline">
+      <span class="text-2xl">🏦</span>
+      <span class="font-bold text-xl text-gray-900 dark:text-gray-100">ClientGuard</span>
     </a>
     <ThemeToggle />
   </div>
 </nav>
-
-<style>
-  .navbar {
-    height: var(--navbar-height);
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(12px);
-  }
-
-  .navbar-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-  }
-
-  .navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-  }
-
-  .brand-icon {
-    font-size: 1.5rem;
-  }
-
-  .brand-text {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-  }
-</style>
 ```
 
 **`src/routes/+layout.svelte`** — Root layout (wraps all pages)
-
 ```svelte
-<script>
+<script lang="ts">
   import '../app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import { page } from '$app/stores';
@@ -1475,155 +928,109 @@ export function toggleTheme() {
   $: isLoginPage = $page.url.pathname === '/login';
 </script>
 
-{#if isLoginPage}
-  <slot />
-{:else}
-  <Navbar />
-  <slot />
-{/if}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+  {#if isLoginPage}
+    <slot />
+  {:else}
+    <Navbar />
+    <slot />
+  {/if}
+</div>
 ```
 
-**`src/lib/api/retention.js`** — Retention API client (mocked for now)
+**`src/lib/api/retention.ts`** — Retention API client (mocked for now)
+```typescript
+import type { RetentionMethod } from '$lib/types';
 
-```javascript
 /**
  * Fetch suggested retention methods for a client.
  * Replace the mock with the real API URL once the API team provides it.
  */
-const API_BASE_URL = "https://your-api-url.com"; // TODO: replace with real URL
+const API_BASE_URL: string = 'https://your-api-url.com'; // TODO: replace with real URL
 
-export async function getRetentionMethods(clientId) {
+export async function getRetentionMethods(clientId: string): Promise<RetentionMethod[]> {
   try {
-    const res = await fetch(
-      `${API_BASE_URL}/api/retention?clientId=${clientId}`,
-    );
-    if (!res.ok) throw new Error("API error");
+    const res = await fetch(`${API_BASE_URL}/api/retention?clientId=${clientId}`);
+    if (!res.ok) throw new Error('API error');
     const data = await res.json();
     return data.methods || [];
   } catch (err) {
-    console.warn("Retention API unavailable, using mock data:", err);
+    console.warn('Retention API unavailable, using mock data:', err);
     // Mock fallback while API is not ready
     return [
       {
-        title: "Personalized Rate Offer",
-        description:
-          "Offer a tailored interest rate increase of 0.25% on their primary savings account to demonstrate value.",
-        priority: "high",
+        title: 'Personalized Rate Offer',
+        description: 'Offer a tailored interest rate increase of 0.25% on their primary savings account to demonstrate value.',
+        priority: 'high'
       },
       {
-        title: "Dedicated Support Line",
-        description:
-          "Assign a dedicated relationship manager with priority phone support to improve service experience.",
-        priority: "medium",
+        title: 'Dedicated Support Line',
+        description: 'Assign a dedicated relationship manager with priority phone support to improve service experience.',
+        priority: 'medium'
       },
       {
-        title: "Fee Waiver Package",
-        description:
-          "Waive monthly maintenance fees for the next 12 months as a loyalty incentive.",
-        priority: "medium",
+        title: 'Fee Waiver Package',
+        description: 'Waive monthly maintenance fees for the next 12 months as a loyalty incentive.',
+        priority: 'medium'
       },
       {
-        title: "Financial Planning Session",
-        description:
-          "Offer a complimentary financial planning session to deepen the relationship.",
-        priority: "low",
-      },
+        title: 'Financial Planning Session',
+        description: 'Offer a complimentary financial planning session to deepen the relationship.',
+        priority: 'low'
+      }
     ];
   }
 }
 ```
 
 **`src/lib/components/RetentionCard.svelte`** — Retention method card
-
 ```svelte
-<script>
-  export let method;
+<script lang="ts">
+  import type { RetentionMethod } from '$lib/types';
 
-  const priorityColors = {
-    high: { color: 'var(--danger)', bg: 'var(--danger-bg)' },
-    medium: { color: 'var(--warning)', bg: 'var(--warning-bg)' },
-    low: { color: 'var(--success)', bg: 'var(--success-bg)' },
+  export let method: RetentionMethod;
+
+  const priorityClasses: Record<string, string> = {
+    high: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950',
+    medium: 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950',
+    low: 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950',
   };
 
-  $: pStyle = priorityColors[method.priority] || priorityColors.medium;
+  $: pClass = priorityClasses[method.priority] || priorityClasses.medium;
 </script>
 
-<div class="retention-card">
-  <div class="retention-header">
-    <h4>{method.title}</h4>
-    <span class="priority-tag" style="color: {pStyle.color}; background: {pStyle.bg};">
+<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 transition hover:border-indigo-500">
+  <div class="flex justify-between items-center mb-2 gap-2">
+    <h4 class="text-base font-semibold text-gray-900 dark:text-gray-100 m-0">{method.title}</h4>
+    <span class="text-[0.7rem] font-semibold uppercase tracking-wide px-2.5 py-0.5 rounded-md whitespace-nowrap {pClass}">
       {method.priority}
     </span>
   </div>
-  <p class="retention-desc">{method.description}</p>
+  <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{method.description}</p>
 </div>
-
-<style>
-  .retention-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    transition: border-color 0.2s;
-  }
-
-  .retention-card:hover {
-    border-color: var(--accent);
-  }
-
-  .retention-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
-  }
-
-  h4 {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--text-primary);
-  }
-
-  .priority-tag {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    white-space: nowrap;
-  }
-
-  .retention-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-</style>
 ```
 
 **`src/routes/client/[id]/+page.svelte`** — Client detail page
-
 ```svelte
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { user, authLoading } from '$lib/stores/authStore.js';
+  import { user, authLoading } from '$lib/stores/authStore';
   import { goto } from '$app/navigation';
-  import { getClient } from '$lib/firebase/firestore.js';
-  import { getRetentionMethods } from '$lib/api/retention.js';
+  import { getClient } from '$lib/firebase/firestore';
+  import { getRetentionMethods } from '$lib/api/retention';
   import ScoreBadge from '$lib/components/ScoreBadge.svelte';
   import RetentionCard from '$lib/components/RetentionCard.svelte';
+  import type { Client, RetentionMethod } from '$lib/types';
 
-  let client = null;
-  let retentionMethods = [];
-  let loading = true;
+  let client: Client | null = null;
+  let retentionMethods: RetentionMethod[] = [];
+  let loading: boolean = true;
 
   $: if (!$authLoading && !$user) goto('/login');
 
   onMount(async () => {
-    const clientId = $page.params.id;
+    const clientId: string = $page.params.id;
     client = await getClient(clientId);
     retentionMethods = await getRetentionMethods(clientId);
     loading = false;
@@ -1631,42 +1038,44 @@ export async function getRetentionMethods(clientId) {
 </script>
 
 {#if loading}
-  <div class="page-loading">
-    <div class="spinner"></div>
+  <div class="flex flex-col justify-center items-center h-[60vh] text-gray-400">
+    <div class="w-9 h-9 border-3 border-gray-200 dark:border-gray-700 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
     <p>Loading client details...</p>
   </div>
 {:else if client}
-  <div class="detail-page" id="client-detail">
-    <div class="detail-header">
-      <a href="/" class="back-link">← Back to Dashboard</a>
-      <h1>{client.name}</h1>
-      <span class="account-type">{client.accountType} Account</span>
+  <div class="max-w-4xl mx-auto px-6 py-8" id="client-detail">
+    <!-- Header -->
+    <div class="mb-8">
+      <a href="/" class="inline-block text-indigo-500 text-sm font-medium mb-3 hover:opacity-70 transition">← Back to Dashboard</a>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 m-0">{client.name}</h1>
+      <span class="text-sm text-gray-400">{client.accountType} Account</span>
     </div>
 
-    <div class="detail-grid">
+    <!-- Score Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
       <!-- Risk Score -->
-      <div class="score-card risk-section">
-        <div class="score-top">
-          <h2>Risk Score</h2>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 m-0">Risk Score</h2>
           <ScoreBadge label="Risk" score={client.riskScore} type="risk" />
         </div>
-        <p class="explanation">{client.riskExplanation}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{client.riskExplanation}</p>
       </div>
 
       <!-- Value Score -->
-      <div class="score-card value-section">
-        <div class="score-top">
-          <h2>Value Score</h2>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 m-0">Value Score</h2>
           <ScoreBadge label="Value" score={client.valueScore} type="value" />
         </div>
-        <p class="explanation">{client.valueExplanation}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{client.valueExplanation}</p>
       </div>
     </div>
 
     <!-- Retention Methods -->
-    <section class="retention-section" id="retention-methods">
-      <h2>Suggested Retention Methods</h2>
-      <div class="retention-grid">
+    <section id="retention-methods">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Suggested Retention Methods</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {#each retentionMethods as method}
           <RetentionCard {method} />
         {/each}
@@ -1674,163 +1083,39 @@ export async function getRetentionMethods(clientId) {
     </section>
   </div>
 {:else}
-  <div class="not-found">
-    <h2>Client not found</h2>
-    <a href="/">Return to dashboard</a>
+  <div class="text-center py-16 text-gray-400">
+    <h2 class="text-xl mb-2">Client not found</h2>
+    <a href="/" class="text-indigo-500 hover:underline">Return to dashboard</a>
   </div>
 {/if}
-
-<style>
-  .detail-page {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
-
-  .detail-header {
-    margin-bottom: 2rem;
-  }
-
-  .back-link {
-    display: inline-block;
-    color: var(--accent);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
-    transition: opacity 0.2s;
-  }
-
-  .back-link:hover {
-    opacity: 0.7;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin: 0;
-    color: var(--text-primary);
-  }
-
-  .account-type {
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
-  }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    margin-bottom: 2rem;
-  }
-
-  .score-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-  }
-
-  .score-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .score-top h2 {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
-  .explanation {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .retention-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-  }
-
-  .retention-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .page-loading {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    color: var(--text-tertiary);
-  }
-
-  .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 1rem;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .not-found {
-    text-align: center;
-    padding: 4rem;
-    color: var(--text-tertiary);
-  }
-
-  .not-found a {
-    color: var(--accent);
-    margin-top: 1rem;
-    display: inline-block;
-  }
-
-  @media (max-width: 700px) {
-    .detail-grid, .retention-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
 ```
 
 ---
 
 ## Work Order Summary
 
-| Order | Who          | Task                                           | Depends On           |
-| ----- | ------------ | ---------------------------------------------- | -------------------- |
-| 1     | Person 1     | Initialize SvelteKit + install Firebase + push | Nothing (START HERE) |
-| 2     | Person 2 + 3 | Pull, start working on own files               | Step 1 done          |
-| 3     | Person 1     | Firebase config, auth, Firestore, login page   | Step 1               |
-| 4     | Person 2     | Client store, components, dashboard page       | Step 1               |
-| 5     | Person 3     | app.css, layout, theme, detail page, API       | Step 1               |
-| 6     | All          | Pull all changes, test integration             | Steps 3-5            |
+| Order | Who | Task | Depends On |
+|-------|-----|------|------------|
+| 1 | Person 1 | Initialize SvelteKit + install Firebase + Tailwind + push | Nothing (START HERE) |
+| 2 | Person 2 + 3 | Pull, start working on own files | Step 1 done |
+| 3 | Person 1 | Firebase config, auth, Firestore, types, login page | Step 1 |
+| 4 | Person 2 | Client store, components, dashboard page | Step 1 |
+| 5 | Person 3 | app.css, layout, theme, detail page, API | Step 1 |
+| 6 | All | Pull all changes, test integration | Steps 3-5 |
 
 > [!IMPORTANT]
-> **Merge conflict prevention**: Each person creates ONLY the files in their column above. The only file Person 1 creates that others import from is `src/lib/firebase/` and `src/lib/stores/authStore.js` — these are **read-only** for Person 2 and 3 (they import but never edit them).
+> **Merge conflict prevention**: Each person creates ONLY the files in their column above. The only files Person 1 creates that others import from are `src/lib/firebase/`, `src/lib/stores/authStore.ts`, and `src/lib/types.ts` — these are **read-only** for Person 2 and 3 (they import but never edit them).
 
 ---
 
 ## Verification Plan
 
 ### Automated Tests
-
 ```bash
 npm run dev    # Start the dev server
 ```
 
 ### Manual Verification Checklist
-
 1. ✅ App loads at `http://localhost:5173`
 2. ✅ Redirects to `/login` when not authenticated
 3. ✅ Login works with email/password → redirects to dashboard
@@ -1838,21 +1123,22 @@ npm run dev    # Start the dev server
 5. ✅ Client list is scrollable and populated from Firestore
 6. ✅ Risk & value scores shown with color-coded badges
 7. ✅ Filters narrow down the client list
-8. ✅ Clicking a client goes to `/client/[id]`
+8. ✅ Clicking a client navigates to `/client/[id]`
 9. ✅ Client detail page shows scores + explanations
 10. ✅ Retention methods displayed (mocked for now)
-11. ✅ Theme toggle switches light ↔ dark
+11. ✅ Theme toggle switches light ↔ dark (persists in localStorage)
 12. ✅ Logout returns to login page
+13. ✅ Tailwind dark mode classes render correctly
 
 ---
 
 ## Open Questions
 
 > [!IMPORTANT]
-> **Retention API URL** — Once the API team provides the endpoint URL, Person 3 needs to update `src/lib/api/retention.js` with the real URL (replace the `API_BASE_URL` constant).
+> **Retention API URL** — Once the API team provides the endpoint URL, Person 3 needs to update `src/lib/api/retention.ts` with the real URL (replace the `API_BASE_URL` constant).
 
 > [!NOTE]
-> **Filter options** — The filter panel currently supports search by name and score ranges. When you provide the additional filter options, they'll be added to `FilterPanel.svelte` and the `clientStore.js` filter logic.
+> **Filter options** — The filter panel currently supports search by name and score ranges. When you provide the additional filter options, they'll be added to `FilterPanel.svelte` and the `clientStore.ts` filter logic.
 
 > [!NOTE]
-> **Firebase config values** — Person 1 will need the actual Firebase project credentials after creating the project in the Firebase Console. These go in `src/lib/firebase/config.js`.
+> **Firebase config values** — Person 1 will need the actual Firebase project credentials after creating the project in the Firebase Console. These go in `src/lib/firebase/config.ts`.
