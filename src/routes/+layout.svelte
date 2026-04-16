@@ -14,7 +14,7 @@
 </script>
 
 <div
-	class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors"
+	class="min-h-screen bg-white text-blue-950 transition-colors"
 >
 	{#if isLoginPage}
 		{@render children()}

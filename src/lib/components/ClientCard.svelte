@@ -8,21 +8,19 @@
 <a
 	href="/client/{client.id}"
 	id="client-{client.id}"
-	class="flex items-center justify-between p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl cursor-pointer transition-all hover:border-indigo-500 hover:shadow-md hover:-translate-y-0.5 no-underline text-inherit"
+	class="grid grid-cols-[1fr_auto_auto] gap-4 items-center px-3 py-1.5 border-b border-blue-50 hover:bg-blue-50 transition-colors no-underline text-inherit group last:border-0 cursor-pointer"
 >
-	<div class="flex items-center gap-3">
-		<div
-			class="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0"
-		>
-			{client.name.charAt(0).toUpperCase()}
-		</div>
-		<div class="flex flex-col">
-			<span class="font-semibold text-gray-900 dark:text-gray-100">{client.name}</span>
-			<span class="text-xs text-gray-400 dark:text-gray-500">{client.accountType}</span>
+	<div class="flex flex-col">
+		<span class="font-bold text-blue-950 group-hover:text-blue-600 transition-colors text-[11px] tracking-widest uppercase">{client.name}</span>
+		<div class="flex items-center text-blue-400 mt-0.5">
+			<span class="text-[8px] font-bold uppercase tracking-widest">{client.accountType}</span>
 		</div>
 	</div>
-	<div class="flex gap-3">
-		<ScoreBadge label="Risk" score={client.riskScore} type="risk" />
-		<ScoreBadge label="Value" score={client.valueScore} type="value" />
+	
+	<div class="w-12 flex justify-center">
+		<ScoreBadge label="" score={client.riskScore} type="risk" />
+	</div>
+	<div class="w-12 flex justify-center">
+		<ScoreBadge label="" score={client.valueScore} type="value" />
 	</div>
 </a>

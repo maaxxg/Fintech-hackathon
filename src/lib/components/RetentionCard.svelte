@@ -4,24 +4,22 @@
 	let { method }: { method: RetentionMethod } = $props();
 
 	const priorityClasses: Record<string, string> = {
-		high: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950',
-		medium: 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950',
-		low: 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950'
+		high: 'text-blue-900 bg-blue-100 border-blue-900',
+		medium: 'text-blue-700 bg-white border-blue-300',
+		low: 'text-blue-500 bg-white border-blue-200'
 	};
 
 	let pClass = $derived(priorityClasses[method.priority] || priorityClasses.medium);
 </script>
 
-<div
-	class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 transition hover:border-indigo-500"
->
-	<div class="flex justify-between items-center mb-2 gap-2">
-		<h4 class="text-base font-semibold text-gray-900 dark:text-gray-100 m-0">{method.title}</h4>
+<div class="bg-white border border-blue-100 rounded-none p-3">
+	<div class="flex justify-between items-start mb-2 gap-2">
+		<h4 class="text-[11px] font-bold text-blue-950 uppercase tracking-widest m-0 leading-tight">{method.title}</h4>
 		<span
-			class="text-[0.7rem] font-semibold uppercase tracking-wide px-2.5 py-0.5 rounded-md whitespace-nowrap {pClass}"
+			class="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-none border {pClass} whitespace-nowrap"
 		>
 			{method.priority}
 		</span>
 	</div>
-	<p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{method.description}</p>
+	<p class="text-[10px] text-blue-900/70 leading-relaxed m-0 uppercase tracking-widest font-bold">{method.description}</p>
 </div>

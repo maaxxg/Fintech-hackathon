@@ -1,16 +1,16 @@
 <script lang="ts">
-	import ThemeToggle from './ThemeToggle.svelte';
 </script>
 
 <nav
-	class="h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50"
+	class="h-10 bg-white border-b border-blue-200 sticky top-0 z-50 flex items-center"
 	id="navbar"
 >
-	<div class="max-w-7xl mx-auto h-full flex items-center justify-between px-6">
-		<a href="/" class="flex items-center gap-2 no-underline">
-			<span class="text-2xl">🏦</span>
-			<span class="font-bold text-xl text-gray-900 dark:text-gray-100">ClientGuard</span>
+	<div class="w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
+		<a href="/" class="flex items-center no-underline text-blue-900 hover:text-blue-700 transition-colors">
+			<span class="font-bold text-xs uppercase tracking-widest leading-none">ClientGuard</span>
 		</a>
-		<ThemeToggle />
+		<div class="text-[10px] uppercase font-bold tracking-widest text-blue-400">
+			Bank Management System
+		</div>
 	</div>
 </nav>

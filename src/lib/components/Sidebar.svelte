@@ -3,7 +3,7 @@
 	import FilterPanel from './FilterPanel.svelte';
 </script>
 
-<aside class="w-80 shrink-0 flex flex-col gap-4 h-full overflow-y-auto max-md:w-full" id="sidebar">
+<aside class="w-80 shrink-0 flex flex-col gap-6 h-full overflow-y-auto max-md:w-full" id="sidebar">
 	<ManagerProfile />
 	<FilterPanel />
 </aside>

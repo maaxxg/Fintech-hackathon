@@ -18,16 +18,18 @@
 </script>
 
 <div
-	class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5"
+	class="bg-white border border-blue-100 rounded-none p-4"
 	id="filter-panel"
 >
-	<div class="flex justify-between items-center mb-4">
-		<h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Filters</h3>
+	<div class="flex justify-between items-center mb-4 pb-2 border-b border-blue-100">
+		<h3 class="text-[10px] font-bold text-blue-950 uppercase tracking-widest m-0">
+			Filters
+		</h3>
 		<button
 			onclick={resetFilters}
-			class="bg-transparent border-none text-indigo-500 text-xs font-medium cursor-pointer hover:underline"
+			class="text-blue-500 text-[10px] font-bold uppercase tracking-widest hover:text-blue-800"
 		>
-			Reset
+			Clear
 		</button>
 	</div>
 
@@ -35,24 +37,24 @@
 	<div class="mb-4">
 		<label
 			for="search-filter"
-			class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Search</label
+			class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5">Search</label
 		>
 		<input
 			id="search-filter"
 			type="text"
-			placeholder="Client name..."
+			placeholder="Enter Value..."
 			value={$filters.search}
 			oninput={(e) => updateFilter('search', (e.target as HTMLInputElement).value)}
-			class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm placeholder-gray-400 focus:outline-none focus:border-indigo-500 transition"
+			class="w-full px-2.5 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 		/>
 	</div>
 
 	<!-- Risk Score Range -->
 	<div class="mb-4">
-		<label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1"
-			>Risk Score Range</label
+		<label class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5"
+			>Risk Profile</label
 		>
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-1.5">
 			<input
 				id="risk-min"
 				type="number"
@@ -60,9 +62,9 @@
 				max="100"
 				value={$filters.riskMin}
 				oninput={(e) => updateFilter('riskMin', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
+				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 			/>
-			<span class="text-gray-400">—</span>
+			<span class="text-blue-200 text-xs">-</span>
 			<input
 				id="risk-max"
 				type="number"
@@ -70,17 +72,17 @@
 				max="100"
 				value={$filters.riskMax}
 				oninput={(e) => updateFilter('riskMax', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
+				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 			/>
 		</div>
 	</div>
 
 	<!-- Value Score Range -->
-	<div class="mb-4">
-		<label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1"
-			>Value Score Range</label
+	<div class="mb-1">
+		<label class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5"
+			>Value Asc.</label
 		>
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-1.5">
 			<input
 				id="value-min"
 				type="number"
@@ -88,9 +90,9 @@
 				max="100"
 				value={$filters.valueMin}
 				oninput={(e) => updateFilter('valueMin', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
+				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 			/>
-			<span class="text-gray-400">—</span>
+			<span class="text-blue-200 text-xs">-</span>
 			<input
 				id="value-max"
 				type="number"
@@ -98,10 +100,8 @@
 				max="100"
 				value={$filters.valueMax}
 				oninput={(e) => updateFilter('valueMax', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm text-center focus:outline-none focus:border-indigo-500"
+				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 			/>
 		</div>
 	</div>
-
-	<!-- MORE FILTERS WILL BE ADDED HERE LATER -->
 </div>
