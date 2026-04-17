@@ -1,0 +1,32 @@
+{
+  "weights": {
+    "balance_score": 0.3,
+    "revenue_score": 0.25,
+    "product_depth_score": 0.2,
+    "tenure_score": 0.1,
+    "primary_bank_score": 0.1,
+    "credit_rating_score": 0.05
+  },
+  "tiers": {
+    "bronze": [
+      0.0,
+      0.4
+    ],
+    "silver": [
+      0.4,
+      0.7
+    ],
+    "gold": [
+      0.7,
+      0.9
+    ],
+    "platinum": [
+      0.9,
+      1.0
+    ]
+  },
+  "notes": {
+    "credit_rating_convention": "Lower raw KREDITNI_RATING = better credit. credit_rating_score is pct-rank of (-KREDITNI_RATING) with median imputation for NaNs.",
+    "tenure_caveat": "months_since_first_relationship is 100% NaN upstream; tenure_score is set uniformly to 0.5 until the date parser is fixed."
+  }
+}
