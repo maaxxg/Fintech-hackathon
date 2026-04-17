@@ -104,7 +104,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-101",
         "category":          "TRGOVINA_NA_VELIKO_I_NA_MALO",
-        "percentage":        3.0,
+        "max_percentage":        3.0,
         "duration_months":   3,
         "min_monthly_spend": 120,
         "description":       "3% cashback na kupnju u supermarketima i maloprodaji široke potrošnje na 3 mjeseca (min. 120 EUR/mj)",
@@ -112,7 +112,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-102",
         "category":          "DJELATNOSTI_PRUZANJA_SMJESTAJA_I_USLUZIVANJA_HRANE",
-        "percentage":        5.0,
+        "max_percentage":        5.0,
         "duration_months":   3,
         "min_monthly_spend": 80,
         "description":       "5% cashback na ugostiteljstvo i smještaj (restorani, kafići, hoteli) na 3 mjeseca (min. 80 EUR/mj)",
@@ -120,7 +120,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-103",
         "category":          "OPSKRBA_ELEKTRICNOM_ENERGIJOM_PLINOM_PAROM_I_KLIMATIZACIJA",
-        "percentage":        2.0,
+        "max_percentage":        2.0,
         "duration_months":   6,
         "min_monthly_spend": 70,
         "description":       "2% cashback na račune za struju, plin i grijanje na 6 mjeseci (min. 70 EUR/mj)",
@@ -128,7 +128,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-104",
         "category":          "PRIJEVOZ_I_SKLADISTENJE",
-        "percentage":        4.0,
+        "max_percentage":        4.0,
         "duration_months":   3,
         "min_monthly_spend": 50,
         "description":       "4% cashback na javni prijevoz, taksi i prijevozničke usluge na 3 mjeseca (min. 50 EUR/mj)",
@@ -136,7 +136,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-105",
         "category":          "UMJETNOST_ZABAVA_I_REKREACIJA",
-        "percentage":        6.0,
+        "max_percentage":        6.0,
         "duration_months":   3,
         "min_monthly_spend": 40,
         "description":       "6% cashback na kino, koncerte, sport i rekreaciju na 3 mjeseca (min. 40 EUR/mj)",
@@ -144,7 +144,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-106",
         "category":          "INFORMACIJE_I_KOMUNIKACIJE",
-        "percentage":        3.0,
+        "max_percentage":        3.0,
         "duration_months":   6,
         "min_monthly_spend": 50,
         "description":       "3% cashback na telekom usluge, streaming i druge digitalne pretplate na 6 mjeseci (min. 50 EUR/mj)",
@@ -152,7 +152,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-107",
         "category":          "FINANCIJSKE_DJELATNOSTI_I_OSIGURANJE",
-        "percentage":        2.0,
+        "max_percentage":        2.0,
         "duration_months":   3,
         "min_monthly_spend": 60,
         "description":       "2% cashback na odabrane financijske i osiguravateljske usluge (koje nisu izuzete pravilima kartičnih shema) na 3 mjeseca (min. 60 EUR/mj)",
@@ -160,7 +160,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-108",
         "category":          "OBRAZOVANJE",
-        "percentage":        4.0,
+        "max_percentage":        4.0,
         "duration_months":   6,
         "min_monthly_spend": 100,
         "description":       "4% cashback na školarine, tečajeve i online obrazovne programe na 6 mjeseci (min. 100 EUR/mj)",
@@ -168,7 +168,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-109",
         "category":          "OSTALE_USLUZNE_DJELATNOSTI",
-        "percentage":        5.0,
+        "max_percentage":        5.0,
         "duration_months":   3,
         "min_monthly_spend": 60,
         "description":       "5% cashback na usluge poput frizera, kozmetičkih salona, čišćenja i drugih osobnih usluga na 3 mjeseca (min. 60 EUR/mj)",
@@ -176,7 +176,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-110",
         "category":          "POLJOPRIVREDA_SUMARSTVO_I_RIBARSTVO",
-        "percentage":        3.0,
+        "max_percentage":        3.0,
         "duration_months":   6,
         "min_monthly_spend": 80,
         "description":       "3% cashback na kupnju u poljoprivrednim ljekarnama, trgovinama opreme i kod OPG-ova na 6 mjeseci (min. 80 EUR/mj)",
@@ -184,7 +184,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-111",
         "category":          "OPSKRBA_VODOM",
-        "percentage":        1.0,
+        "max_percentage":        1.0,
         "duration_months":   6,
         "min_monthly_spend": 50,
         "description":       "1% cashback na račune za vodu i odvodnju na 6 mjeseci (min. 50 EUR/mj)",
@@ -192,7 +192,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-112",
         "category":          "DJELATNOSTI_ZDRAVSTVENE_ZASTITE_I_SOCIJALNE_SKRBI",
-        "percentage":        2.0,
+        "max_percentage":        2.0,
         "duration_months":   3,
         "min_monthly_spend": 60,
         "description":       "2% cashback na privatne zdravstvene i socijalne usluge (ordinacije, poliklinike, domovi) na 3 mjeseca (min. 60 EUR/mj)",
@@ -200,7 +200,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-113",
         "category":          "STRUCNE_ZNANSTVENE_I_TEHNICKE_DJELATNOSTI",
-        "percentage":        3.0,
+        "max_percentage":        3.0,
         "duration_months":   3,
         "min_monthly_spend": 150,
         "description":       "3% cashback na stručne, znanstvene i tehničke usluge (konzalting, IT, pravne, računovodstvene) na 3 mjeseca (min. 150 EUR/mj)",
@@ -208,7 +208,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-114",
         "category":          "POSLOVANJE_NEKRETNINAMA",
-        "percentage":        1.0,
+        "max_percentage":        1.0,
         "duration_months":   6,
         "min_monthly_spend": 150,
         "description":       "1% cashback na odabrane transakcije povezane s poslovanjem nekretninama (agencijske naknade, upravljanje zgradama) na 6 mjeseci (min. 150 EUR/mj)",
@@ -216,7 +216,7 @@ OFFER_CATALOG = [
     {
         "offer_id":          "OFF-115",
         "category":          "JAVNA_UPRAVA_I_OBRANA",
-        "percentage":        1.0,
+        "max_percentage":        1.0,
         "duration_months":   3,
         "min_monthly_spend": 40,
         "description":       "1% cashback na plaćanja prema javnoj upravi (pristojbe, naknade) koja nisu izuzeta pravilima kartičnih shema na 3 mjeseca (min. 40 EUR/mj)",
