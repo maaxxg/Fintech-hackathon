@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { label = '', score = 0, type = 'risk' } = $props();
+	let { label = '', score = 0 } = $props();
 
 	// Just shades of blue based on intensity to keep it monochrome
 	let colorClass = $derived(

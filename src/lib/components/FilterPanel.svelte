@@ -47,8 +47,8 @@
 
 	<!-- Risk Score Range -->
 	<div class="mb-4">
-		<label class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
-			>Risk Profile</label
+		<span class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
+			>Risk Profile</span
 		>
 		<div class="flex items-center gap-1.5">
 			<input
@@ -75,8 +75,8 @@
 
 	<!-- Value Score Range -->
 	<div class="mb-1">
-		<label class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
-			>Value Asc.</label
+		<span class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
+			>Value Asc.</span
 		>
 		<div class="flex items-center gap-1.5">
 			<input

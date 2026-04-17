@@ -16,12 +16,14 @@
 				Bank Management System
 			</div>
 		</div>
-		<div class="flex justify-end hidden md:flex">
+		<div class="flex hidden justify-end md:flex">
 			<a
 				href="/recommendations"
 				class="flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
 			>
-				<span class="text-xs leading-none font-bold tracking-widest uppercase">Contract Recommendations</span>
+				<span class="text-xs leading-none font-bold tracking-widest uppercase"
+					>Contract Recommendations</span
+				>
 			</a>
 		</div>
 	</div>

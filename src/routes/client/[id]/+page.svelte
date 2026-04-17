@@ -38,8 +38,6 @@
 			: []
 	);
 
-
-
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
 	});
@@ -91,6 +89,80 @@
 			</div>
 		</div>
 
+		<!-- Strategic Overview (Scores & Actions) -->
+		<div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
+			<!-- Scores Side -->
+			<div class="flex flex-col gap-6 lg:col-span-5">
+				<!-- Risk Score -->
+				<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
+					<div class="mb-1 flex items-center justify-between">
+						<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
+							Risk Profile
+						</h2>
+						<ScoreBadge label="" score={client.riskScore} />
+					</div>
+					<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
+						<div
+							class="h-full rounded-none bg-blue-600 transition-all duration-500"
+							style="width: {client.riskScore}%"
+						></div>
+					</div>
+					<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
+						{client.riskExplanation}
+					</p>
+				</div>
+
+				<!-- Value Score -->
+				<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
+					<div class="mb-1 flex items-center justify-between">
+						<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
+							Value Assessment
+						</h2>
+						<ScoreBadge label="" score={client.valueScore} />
+					</div>
+					<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
+						<div
+							class="h-full rounded-none bg-blue-600 transition-all duration-500"
+							style="width: {client.valueScore}%"
+						></div>
+					</div>
+					<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
+						{client.valueExplanation}
+					</p>
+				</div>
+			</div>
+
+			<!-- Retention Methods / Required Actions Side -->
+			<div
+				class="flex flex-col rounded-none border border-rose-200 bg-rose-50/30 p-5 lg:col-span-7"
+			>
+				<h2
+					class="mb-4 flex items-center gap-2 border-b border-rose-200 pb-2 text-sm font-extrabold tracking-widest text-rose-950 uppercase"
+				>
+					<svg class="h-5 w-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+						><path
+							stroke-linecap="square"
+							stroke-linejoin="miter"
+							stroke-width="2"
+							d="M13 10V3L4 14h7v7l9-11h-7z"
+						></path></svg
+					>
+					Required Actions
+				</h2>
+				<div class="space-y-4">
+					{#each retentionMethods as method}
+						<RetentionCard {method} />
+					{:else}
+						<div
+							class="flex items-center justify-center py-6 text-[10px] font-bold tracking-widest uppercase text-rose-400"
+						>
+							No current required actions.
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+
 		<!-- Client Info -->
 		<div class="mb-6 rounded-none border border-blue-100 bg-white p-5 shadow-none">
 			<h2
@@ -103,7 +175,7 @@
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Email</span
 					>
-					<span class="block truncate text-base font-semibold text-blue-950" title={client.email}
+					<span class="block text-base font-semibold break-words text-blue-950" title={client.email}
 						>{client.email}</span
 					>
 				</div>
@@ -111,26 +183,28 @@
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Phone</span
 					>
-					<span class="block truncate text-base font-semibold text-blue-950">{client.phone}</span>
+					<span class="block text-base font-semibold break-words text-blue-950">{client.phone}</span
+					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Account</span
 					>
-					<span class="text-base font-semibold text-blue-950">{client.accountType}</span>
+					<span class="text-base font-semibold break-words text-blue-950">{client.accountType}</span
+					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Joined</span
 					>
-					<span class="text-base font-semibold text-blue-950">{client.joinDate}</span>
+					<span class="text-base font-semibold break-words text-blue-950">{client.joinDate}</span>
 				</div>
 			</div>
 		</div>
 
 		<!-- Additional Client Info -->
 		{#if additionalDetails.length > 0}
-			<div class="mb-6 rounded-none border border-blue-100 bg-white p-5 shadow-none">
+			<div class="mb-8 rounded-none border border-blue-100 bg-white p-5 shadow-none">
 				<h2
 					class="mb-4 border-b border-blue-100 pb-2 text-xs font-bold tracking-widest text-blue-950 uppercase"
 				>
@@ -138,77 +212,22 @@
 				</h2>
 				<div class="grid grid-cols-1 gap-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					{#each additionalDetails as [key, value]}
-						<div class="overflow-hidden">
+						<div class="min-w-0">
 							<span
-								class="mb-1 block truncate text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+								class="mb-1 block text-[11px] font-bold tracking-widest break-words text-blue-500 uppercase"
 								title={key.replace(/_/g, ' ')}
 							>
 								{key.replace(/_/g, ' ')}
 							</span>
-							<span class="block truncate text-sm font-semibold text-blue-950" title={String(value)}
-								>{value}</span
+							<span
+								class="block text-sm font-semibold break-words text-blue-950"
+								title={String(value)}>{value}</span
 							>
 						</div>
 					{/each}
 				</div>
 			</div>
 		{/if}
-
-		<!-- Score Cards Grid -->
-		<div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-			<!-- Risk Score -->
-			<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
-				<div class="mb-1 flex items-center justify-between">
-					<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
-						Risk Profile
-					</h2>
-					<ScoreBadge label="" score={client.riskScore} type="risk" />
-				</div>
-				<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
-					<div
-						class="h-full rounded-none bg-blue-600 transition-all duration-500"
-						style="width: {client.riskScore}%"
-					></div>
-				</div>
-				<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
-					{client.riskExplanation}
-				</p>
-			</div>
-
-			<!-- Value Score -->
-			<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
-				<div class="mb-1 flex items-center justify-between">
-					<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
-						Value Assessment
-					</h2>
-					<ScoreBadge label="" score={client.valueScore} type="value" />
-				</div>
-				<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
-					<div
-						class="h-full rounded-none bg-blue-600 transition-all duration-500"
-						style="width: {client.valueScore}%"
-					></div>
-				</div>
-				<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
-					{client.valueExplanation}
-				</p>
-			</div>
-		</div>
-
-		<!-- Retention Methods -->
-		<section id="retention-methods" class="mt-8">
-			<h2
-				class="mb-4 border-b border-blue-200 pb-2 text-xs font-bold tracking-widest text-blue-950 uppercase"
-			>
-				Required Actions
-			</h2>
-
-			<div class="space-y-4">
-				{#each retentionMethods as method}
-					<RetentionCard {method} />
-				{/each}
-			</div>
-		</section>
 	</div>
 {:else}
 	<div class="flex flex-col items-center justify-center py-24 text-center">

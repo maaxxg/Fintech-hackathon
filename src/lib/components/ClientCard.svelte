@@ -21,9 +21,9 @@
 	</div>
 
 	<div class="flex w-12 justify-center">
-		<ScoreBadge label="" score={client.riskScore} type="risk" />
+		<ScoreBadge label="" score={client.riskScore} />
 	</div>
 	<div class="flex w-12 justify-center">
-		<ScoreBadge label="" score={client.valueScore} type="value" />
+		<ScoreBadge label="" score={client.valueScore} />
 	</div>
 </a>

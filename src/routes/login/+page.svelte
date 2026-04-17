@@ -18,7 +18,8 @@
 		try {
 			await login(email, password);
 			goto('/');
-		} catch (err) {
+		} catch (e) {
+			console.error(e);
 			error = 'Invalid email or password';
 		} finally {
 			loading = false;
