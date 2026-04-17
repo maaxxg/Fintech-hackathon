@@ -22,7 +22,7 @@
 	<span class="flex items-center gap-0.5 font-bold">
 		{score}
 		{#if arrow}
-			<span class="text-[9px]">{arrow}</span>
+			<span class="text-[10px]">{arrow}</span>
 		{/if}
 	</span>
 </div>
