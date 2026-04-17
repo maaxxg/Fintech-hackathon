@@ -1,0 +1,16 @@
+/.claude
+/CLAUDE.md
+data/dataRaw
+/misc
+/dataRaw
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
