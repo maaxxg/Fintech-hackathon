@@ -25,9 +25,6 @@
 				<span class="mt-0.5 text-[10px] font-bold tracking-widest text-blue-600 uppercase"
 					>{$manager.role}</span
 				>
-				<span class="mt-0.5 text-[10px] font-medium tracking-widest text-blue-400 uppercase"
-					>{$manager.branch}</span
-				>
 			</div>
 		</div>
 		<button
