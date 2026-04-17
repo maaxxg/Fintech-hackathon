@@ -9,7 +9,7 @@
 # jupyter nbconvert --to notebook --execute notebooks/04_features_value.ipynb
 # jupyter nbconvert --to notebook --execute notebooks/05_features_reco.ipynb
 # jupyter nbconvert --to notebook --execute notebooks/06_train_churn.ipynb
-# jupyter nbconvert --to notebook --execute notebooks/07_train_value.ipynb
+# jupyter nbconvert --to notebook --execute notebooks/07_value.ipynb
 # jupyter nbconvert --to notebook --execute notebooks/08_train_recommender.ipynb
 # jupyter nbconvert --to notebook --execute notebooks/09_merchant_analysis.ipynb
 # jupyter nbconvert --to notebook --execute notebooks/10_score_holdout.ipynb

@@ -46,12 +46,18 @@ VALUE_WEIGHTS = {
     "primary_bank_score":   0.10,
     "credit_rating_score":  0.05,
 }
+# Fixed z-threshold tier policy for calibrated value_score_z.
+# platinum threshold set to z > 1.2816 (approximately top 10% under normality).
+VALUE_TIER_LABELS = ["bronze", "silver", "gold", "platinum"]
+VALUE_TIER_Z_BINS = [-float("inf"), -1.0, 0.0, 1.2816, float("inf")]
 
 VALUE_TIERS = {
-    "bronze":   (0.0,  0.40),
-    "silver":   (0.40, 0.70),
-    "gold":     (0.70, 0.90),
-    "platinum": (0.90, 1.0),
+    # Normal-calibrated score ranges derived from VALUE_TIER_Z_BINS
+    # with mapping: value_score = clip((value_score_z + 3) / 6, 0, 1)
+    "bronze":   (0.0,      1.0 / 3.0),
+    "silver":   (1.0 / 3.0, 0.5),
+    "gold":     (0.5,      (1.2816 + 3.0) / 6.0),
+    "platinum": ((1.2816 + 3.0) / 6.0, 1.0),
 }
 
 # ---------------------------------------------------------------------------
