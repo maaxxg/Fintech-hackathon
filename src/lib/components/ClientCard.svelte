@@ -8,14 +8,14 @@
 <a
 	href="/client/{client.id}"
 	id="client-{client.id}"
-	class="group grid cursor-pointer grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-l-[3px] border-blue-50 border-l-transparent px-3 py-1.5 text-inherit no-underline transition-colors last:border-b-0 hover:border-l-blue-600 hover:bg-blue-50/60"
+	class="group grid cursor-pointer grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-l-[3px] border-red-50 border-l-transparent px-3 py-1.5 text-inherit no-underline transition-colors last:border-b-0 hover:border-l-red-600 hover:bg-red-50/60"
 >
 	<div class="flex flex-col pl-1">
 		<span
-			class="text-xs font-bold tracking-widest text-blue-950 uppercase transition-colors group-hover:text-blue-600"
+			class="text-xs font-bold tracking-widest text-red-950 uppercase transition-colors group-hover:text-red-600"
 			>{client.name}</span
 		>
-		<div class="mt-0.5 flex items-center text-blue-400">
+		<div class="mt-0.5 flex items-center text-red-400">
 			<span class="text-[10px] font-bold tracking-widest uppercase">{client.accountType}</span>
 		</div>
 	</div>

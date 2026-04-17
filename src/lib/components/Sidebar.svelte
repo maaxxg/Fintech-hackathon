@@ -8,6 +8,6 @@
 	<FilterPanel />
 
 	<div class="mt-auto mb-4 flex grow items-center justify-center min-h-0">
-		<img src="/logo.png" alt="CCG Logo" class="h-full w-auto max-w-[16rem] object-contain mix-blend-multiply" />
+		<img src="/Hpb-logo.svg.png" alt="HPB Logo" class="h-full w-auto max-w-[16rem] object-contain mix-blend-multiply" />
 	</div>
 </aside>

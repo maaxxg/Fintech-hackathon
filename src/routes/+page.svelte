@@ -16,14 +16,14 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard — ClientGuard</title>
+	<title>Dashboard — HPB</title>
 	<meta name="description" content="Bank manager client dashboard" />
 </svelte:head>
 
 {#if $authLoading}
 	<div class="flex h-screen items-center justify-center">
 		<div
-			class="h-6 w-6 animate-spin rounded-none border-[3px] border-blue-100 border-t-blue-600"
+			class="h-6 w-6 animate-spin rounded-none border-[3px] border-red-100 border-t-red-600"
 		></div>
 	</div>
 {:else if $user}

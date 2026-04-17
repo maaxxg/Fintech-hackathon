@@ -13,7 +13,7 @@
 	let isLoginPage = $derived($page.url.pathname === '/login');
 </script>
 
-<div class="min-h-screen bg-white text-blue-950 transition-colors">
+<div class="min-h-screen bg-white text-red-950 transition-colors">
 	{#if isLoginPage}
 		{@render children()}
 	{:else}

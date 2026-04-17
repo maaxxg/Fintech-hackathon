@@ -4,10 +4,10 @@
 	// Just shades of blue based on intensity to keep it monochrome
 	let colorClass = $derived(
 		score >= 70
-			? 'text-blue-900 bg-blue-100 border-blue-900'
+			? 'text-red-900 bg-red-100 border-red-900'
 			: score >= 40
-				? 'text-blue-700 bg-white border-blue-300'
-				: 'text-blue-500 bg-white border-blue-200'
+				? 'text-red-700 bg-white border-red-300'
+				: 'text-red-500 bg-white border-red-200'
 	);
 
 	let arrow = $derived(score >= 70 ? '↑' : score >= 40 ? '' : '↓');

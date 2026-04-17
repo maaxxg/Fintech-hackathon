@@ -62,30 +62,30 @@
 </script>
 
 <svelte:head>
-	<title>Contract Recommendations — ClientGuard</title>
+	<title>Contract Recommendations — HPB</title>
 </svelte:head>
 
 <div class="mx-auto min-h-screen max-w-7xl bg-gray-50/50 p-6">
-	<div class="mb-8 border-b border-blue-200 pb-4">
-		<h1 class="m-0 text-3xl font-extrabold tracking-widest text-blue-950 uppercase">
+	<div class="mb-8 border-b border-red-200 pb-4">
+		<h1 class="m-0 text-3xl font-extrabold tracking-widest text-red-950 uppercase">
 			Contract Partnerships
 		</h1>
-		<p class="mt-2 text-[11px] font-bold tracking-widest text-blue-500 uppercase">
+		<p class="mt-2 text-[11px] font-bold tracking-widest text-red-500 uppercase">
 			Top recommended sectors for merchant contracting based on client spend volume.
 		</p>
 	</div>
 
 	<!-- Stats & Insight Summary -->
 	<div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-		<div class="flex items-center justify-between rounded-none border border-blue-100 bg-white p-5">
+		<div class="flex items-center justify-between rounded-none border border-red-100 bg-white p-5">
 			<div>
-				<span class="mb-1 block text-[10px] font-bold tracking-widest text-blue-500 uppercase"
+				<span class="mb-1 block text-[10px] font-bold tracking-widest text-red-500 uppercase"
 					>Total Analyzed</span
 				>
-				<span class="text-2xl font-extrabold text-blue-950">23 Fields</span>
+				<span class="text-2xl font-extrabold text-red-950">23 Fields</span>
 			</div>
 			<div
-				class="flex h-10 w-10 items-center justify-center border border-blue-100 bg-blue-50 font-bold text-blue-600"
+				class="flex h-10 w-10 items-center justify-center border border-red-100 bg-red-50 font-bold text-red-600"
 			>
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 					><path
@@ -109,35 +109,35 @@
 				>
 			</div>
 		</div>
-		<div class="flex items-center justify-between rounded-none border border-blue-100 bg-white p-5">
+		<div class="flex items-center justify-between rounded-none border border-red-100 bg-white p-5">
 			<div>
-				<span class="mb-1 block text-[10px] font-bold tracking-widest text-blue-500 uppercase"
+				<span class="mb-1 block text-[10px] font-bold tracking-widest text-red-500 uppercase"
 					>Next Recalc</span
 				>
-				<span class="text-lg font-bold tracking-widest text-blue-950 uppercase">In 14 Days</span>
+				<span class="text-lg font-bold tracking-widest text-red-950 uppercase">In 14 Days</span>
 			</div>
 		</div>
 	</div>
 
 	<!-- Filter & Controls -->
 	<div
-		class="mb-6 flex flex-col items-start justify-between border-b border-blue-100 pb-4 md:flex-row md:items-center"
+		class="mb-6 flex flex-col items-start justify-between border-b border-red-100 pb-4 md:flex-row md:items-center"
 	>
-		<h2 class="m-0 mb-4 text-[11px] font-bold tracking-widest text-blue-950 uppercase md:mb-0">
+		<h2 class="m-0 mb-4 text-[11px] font-bold tracking-widest text-red-950 uppercase md:mb-0">
 			Partnership Targets
 		</h2>
 		<div class="flex items-center gap-3">
-			<span class="text-[10px] font-bold tracking-widest text-blue-500 uppercase"
+			<span class="text-[10px] font-bold tracking-widest text-red-500 uppercase"
 				>Filter Class:</span
 			>
-			<div class="flex border border-blue-200 bg-white">
+			<div class="flex border border-red-200 bg-white">
 				{#each tiers as tier}
 					<button
 						onclick={() => (selectedTier = tier)}
-						class="border-r border-blue-100 px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors last:border-r-0 {selectedTier ===
+						class="border-r border-red-100 px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors last:border-r-0 {selectedTier ===
 						tier
-							? 'bg-blue-600 text-white'
-							: 'text-blue-600 hover:bg-blue-50'}"
+							? 'bg-red-600 text-white'
+							: 'text-red-600 hover:bg-red-50'}"
 					>
 						{tier}
 					</button>
@@ -150,7 +150,7 @@
 	<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 		{#each filteredRecommendations as rec (rec.id)}
 			<div
-				class="group flex cursor-pointer flex-col overflow-hidden rounded-none border border-blue-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-blue-400 hover:shadow-lg"
+				class="group flex cursor-pointer flex-col overflow-hidden rounded-none border border-red-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:shadow-lg"
 			>
 				<!-- Rating Header -->
 				<div
@@ -166,32 +166,32 @@
 				<div class="flex grow flex-col justify-between space-y-4 p-5">
 					<div>
 						<h3
-							class="mb-2 text-sm leading-tight font-extrabold tracking-wider text-blue-950 uppercase"
+							class="mb-2 text-sm leading-tight font-extrabold tracking-wider text-red-950 uppercase"
 						>
 							{rec.field}
 						</h3>
-						<div class="h-1 w-8 bg-blue-200 transition-colors group-hover:bg-blue-500"></div>
+						<div class="h-1 w-8 bg-red-200 transition-colors group-hover:bg-red-500"></div>
 					</div>
 
 					<div class="pt-2">
 						<div class="mb-1 flex items-end justify-between">
-							<span class="text-[10px] font-bold tracking-widest text-blue-400 uppercase"
+							<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase"
 								>Model Score</span
 							>
-							<span class="text-lg font-bold text-blue-900">{rec.score}</span>
+							<span class="text-lg font-bold text-red-900">{rec.score}</span>
 						</div>
 
 						<!-- Score progress bar visualization -->
-						<div class="mb-3 h-[4px] w-full overflow-hidden border border-blue-100 bg-blue-50">
-							<div class="h-full bg-blue-500 transition-all" style="width: {rec.score}%"></div>
+						<div class="mb-3 h-[4px] w-full overflow-hidden border border-red-100 bg-red-50">
+							<div class="h-full bg-red-500 transition-all" style="width: {rec.score}%"></div>
 						</div>
 
 						<div class="flex items-end justify-between">
-							<span class="text-[10px] font-bold tracking-widest text-blue-400 uppercase"
+							<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase"
 								>Est. Spend</span
 							>
 							<span
-								class="border border-blue-100 bg-blue-50 px-2 py-1 text-xs font-bold text-blue-700"
+								class="border border-red-100 bg-red-50 px-2 py-1 text-xs font-bold text-red-700"
 								>{rec.spendVolume}</span
 							>
 						</div>

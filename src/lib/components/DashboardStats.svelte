@@ -16,28 +16,28 @@
 </script>
 
 <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4" id="dashboard-stats">
-	<div class="rounded-none border border-blue-100 bg-white p-4">
-		<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+	<div class="rounded-none border border-red-100 bg-white p-4">
+		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 			>Total Clients</span
 		>
-		<span class="text-2xl font-extrabold text-blue-950">{totalClients}</span>
+		<span class="text-2xl font-extrabold text-red-950">{totalClients}</span>
 	</div>
-	<div class="rounded-none border border-blue-100 bg-white p-4">
-		<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+	<div class="rounded-none border border-red-100 bg-white p-4">
+		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 			>Avg Risk</span
 		>
-		<span class="text-2xl font-extrabold text-blue-950">{avgRisk}</span>
+		<span class="text-2xl font-extrabold text-red-950">{avgRisk}</span>
 	</div>
-	<div class="rounded-none border border-blue-100 bg-white p-4">
-		<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+	<div class="rounded-none border border-red-100 bg-white p-4">
+		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 			>Avg Value</span
 		>
-		<span class="text-2xl font-extrabold text-blue-950">{avgValue}</span>
+		<span class="text-2xl font-extrabold text-red-950">{avgValue}</span>
 	</div>
-	<div class="rounded-none border border-blue-100 bg-white p-4">
-		<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+	<div class="rounded-none border border-red-100 bg-white p-4">
+		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 			>High Risk</span
 		>
-		<span class="text-2xl font-extrabold text-blue-950">{highRisk}</span>
+		<span class="text-2xl font-extrabold text-red-950">{highRisk}</span>
 	</div>
 </div>
