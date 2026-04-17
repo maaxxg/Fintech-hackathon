@@ -67,12 +67,6 @@
 
 <div class="mx-auto min-h-screen max-w-7xl bg-gray-50/50 p-6">
 	<div class="mb-8 border-b border-blue-200 pb-4">
-		<a
-			href="/"
-			class="mb-4 inline-flex items-center text-[11px] font-bold tracking-widest text-blue-600 uppercase transition-colors hover:text-blue-800"
-		>
-			&lt; Back to Dashboard
-		</a>
 		<h1 class="m-0 text-3xl font-extrabold tracking-widest text-blue-950 uppercase">
 			Contract Partnerships
 		</h1>
