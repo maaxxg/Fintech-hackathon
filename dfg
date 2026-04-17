@@ -1,0 +1,65 @@
+[33mcommit 2a1620ece3c70c8daaf149c6e4790c6544ad6eae[m[33m ([m[1;36mHEAD -> [m[1;32mWeb[m[33m)[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Fri Apr 17 05:08:04 2026 +0200
+
+    V2
+
+[33mcommit d929644c831d92bec2078e4d07fb3bf221d45ac9[m
+Author: Vili Cenko <vilicenko@Vilis-MacBook-Air.local>
+Date:   Fri Apr 17 03:32:12 2026 +0200
+
+    uljepsavanje frontenda
+
+[33mcommit 81a433976220ac4a0fafca69819ad493d28f8517[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Fri Apr 17 02:53:36 2026 +0200
+
+    dodao file split-holdout u ui
+
+[33mcommit 6e28ed61f2fa61d1a6174f61dd65f49be65eaccb[m
+Author: Vili Cenko <vilicenko@Vilis-MacBook-Air.local>
+Date:   Fri Apr 17 02:09:22 2026 +0200
+
+    Fix invalid file name
+
+[33mcommit 142cb48a942c456b9b9b49d86915f011e7d8a414[m
+Author: Vili Cenko <vilicenko@Vilis-MacBook-Air.local>
+Date:   Fri Apr 17 01:58:24 2026 +0200
+
+    login style
+
+[33mcommit 23d66bb9dfd7e56cacb51ccd23ff05d07bf843c1[m
+Author: Vili Cenko <vilicenko@Vilis-MacBook-Air.local>
+Date:   Fri Apr 17 01:32:59 2026 +0200
+
+    dizajn stranice
+
+[33mcommit e16da715821ab1693583c9f628d97283fc617a5a[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Fri Apr 17 00:24:50 2026 +0200
+
+    stranica za sad
+
+[33mcommit d804dd3b5b11c4918ed0fca0403c3bb6da4a5473[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Thu Apr 16 21:48:40 2026 +0200
+
+    chore: initialize SvelteKit project with TypeScript, Firebase, Tailwind
+
+[33mcommit 50ea41514fed5a450bc985acc047d6848c015647[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Thu Apr 16 21:30:39 2026 +0200
+
+    finalni plan
+
+[33mcommit f9141806354441b819cb1917689717b4c3d70656[m
+Author: Fran <Fran.arapovic@gmail.com>
+Date:   Thu Apr 16 21:18:32 2026 +0200
+
+    plan izgradnje aplikacije
+
+[33mcommit 0bdb5c95be624a1286d8e1d528e5a1b3c7485bcd[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: max gregoric <49033349+maaxxg@users.noreply.github.com>
+Date:   Thu Apr 16 19:04:03 2026 +0200
+
+    Initial commit

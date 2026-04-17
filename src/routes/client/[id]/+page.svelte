@@ -38,6 +38,8 @@
 			: []
 	);
 
+
+
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
 	});
