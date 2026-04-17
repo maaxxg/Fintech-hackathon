@@ -169,7 +169,7 @@
 				</div>
 
 				<!-- Content Body -->
-				<div class="flex flex-grow flex-col justify-between space-y-4 p-5">
+				<div class="flex grow flex-col justify-between space-y-4 p-5">
 					<div>
 						<h3
 							class="mb-2 text-sm leading-tight font-extrabold tracking-wider text-blue-950 uppercase"
