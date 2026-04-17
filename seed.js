@@ -2,16 +2,16 @@
 // Run with: node seed.js
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc, collection, addDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyBOXa68ARtiUgRqP2GgbieP_1rKueF4sHc',
-	authDomain: 'fintech-hackathon-198cc.firebaseapp.com',
-	projectId: 'fintech-hackathon-198cc',
-	storageBucket: 'fintech-hackathon-198cc.firebasestorage.app',
-	messagingSenderId: '621667564820',
-	appId: '1:621667564820:web:c3d9143c3d3c028613d601'
+	apiKey: 'AIzaSyAhLclbtQZNVp3Sw39-B4ifh490i6rDrTA',
+	authDomain: 'fintech-hackathon-2.firebaseapp.com',
+	projectId: 'fintech-hackathon-2',
+	storageBucket: 'fintech-hackathon-2.firebasestorage.app',
+	messagingSenderId: '597235520689',
+	appId: '1:597235520689:web:13145be5fb7da0464b3e90'
 };
 
 const app = initializeApp(firebaseConfig);
@@ -19,19 +19,29 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 async function seed() {
-	// Sign in to get the UID
-	const cred = await signInWithEmailAndPassword(auth, 'fran.arapovic@gmail.com', '123456');
+	const email = process.argv[2] || 'fran.arapovic@gmail.com';
+	const password = process.argv[3] || '123456';
+	const name = process.argv[4] || 'Fran Arapović';
+
+	// Try to sign in or create user
+	let cred;
+	try {
+		cred = await signInWithEmailAndPassword(auth, email, password);
+	} catch (e) {
+		console.log(`Account not found, creating user ${email}...`);
+		cred = await createUserWithEmailAndPassword(auth, email, password);
+	}
 	const uid = cred.user.uid;
 	console.log('Signed in. UID:', uid);
 
 	// Create manager document (doc ID = UID)
 	await setDoc(doc(db, 'managers', uid), {
-		name: 'Fran Arapović',
-		email: 'fran.arapovic@gmail.com',
+		name: name,
+		email: email,
 		role: 'Senior Relationship Manager',
 		branch: 'Downtown'
 	});
-	console.log('✅ Manager document created');
+	console.log(`✅ Manager document created for ${name}`);
 
 	// Sample clients
 	const clients = [

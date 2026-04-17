@@ -3,13 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyBOXa68ARtiUgRqP2GgbieP_1rKueF4sHc',
-	authDomain: 'fintech-hackathon-198cc.firebaseapp.com',
-	projectId: 'fintech-hackathon-198cc',
-	storageBucket: 'fintech-hackathon-198cc.firebasestorage.app',
-	messagingSenderId: '621667564820',
-	appId: '1:621667564820:web:c3d9143c3d3c028613d601',
-	measurementId: 'G-NN9MKX8063'
+	apiKey: 'AIzaSyAhLclbtQZNVp3Sw39-B4ifh490i6rDrTA',
+	authDomain: 'fintech-hackathon-2.firebaseapp.com',
+	projectId: 'fintech-hackathon-2',
+	storageBucket: 'fintech-hackathon-2.firebasestorage.app',
+	messagingSenderId: '597235520689',
+	appId: '1:597235520689:web:13145be5fb7da0464b3e90',
+	measurementId: 'G-Q6BCME89DC'
 };
 
 const app = initializeApp(firebaseConfig);
