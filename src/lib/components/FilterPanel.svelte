@@ -42,7 +42,7 @@
 		<input
 			id="search-filter"
 			type="text"
-			placeholder="Enter Value..."
+			placeholder="Enter name..."
 			value={$filters.search}
 			oninput={(e) => updateFilter('search', (e.target as HTMLInputElement).value)}
 			class="w-full px-2.5 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"

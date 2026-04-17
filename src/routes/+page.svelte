@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import ClientList from '$lib/components/ClientList.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import DashboardStats from '$lib/components/DashboardStats.svelte';
 
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
@@ -22,7 +23,7 @@
 {#if $authLoading}
 	<div class="flex justify-center items-center h-screen">
 		<div
-			class="w-10 h-10 border-3 border-gray-200 dark:border-gray-700 border-t-indigo-500 rounded-full animate-spin"
+			class="w-6 h-6 border-[3px] border-blue-100 border-t-blue-600 rounded-none animate-spin"
 		></div>
 	</div>
 {:else if $user}
@@ -31,6 +32,7 @@
 		id="dashboard"
 	>
 		<main class="flex-1 flex flex-col min-w-0">
+			<DashboardStats />
 			<ClientList />
 		</main>
 		<Sidebar />
