@@ -27,8 +27,8 @@ OUTCOME_WINDOW_DAYS = 120
 # ---------------------------------------------------------------------------
 # Churn label thresholds
 # ---------------------------------------------------------------------------
-CHURN_TX_CLIFF = 0.15
-CHURN_BALANCE_COLLAPSE = 0.05
+CHURN_TX_CLIFF = 0.05          # < 5 % of avg 4-month rate → cliff
+CHURN_BALANCE_COLLAPSE = 0.01  # < 1 % of avg feature-window balance → collapse
 
 # ---------------------------------------------------------------------------
 # Inclusion threshold
