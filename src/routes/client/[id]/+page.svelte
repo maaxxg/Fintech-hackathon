@@ -12,6 +12,7 @@
 	let client = $state<Client | null>(null);
 	let retentionMethods = $state<RetentionMethod[]>([]);
 	let loading = $state(true);
+	let showValueDetails = $state(false);
 
 	let additionalDetails = $derived(
 		client
@@ -125,7 +126,7 @@
 		<!-- Strategic Overview (Scores & Actions) -->
 		<div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
 			<!-- Scores Side -->
-			<div class="flex flex-col gap-6 lg:col-span-5">
+			<div class="flex flex-col gap-6 lg:col-span-7">
 				<!-- Risk Score -->
 				<div class="rounded-none border border-red-100 bg-white p-5 shadow-none">
 					<div class="mb-1 flex items-center justify-between">
@@ -162,12 +163,69 @@
 					<p class="text-sm leading-relaxed font-bold tracking-wide text-red-900/80 uppercase">
 						{client.valueExplanation}
 					</p>
+
+					<button
+						onclick={() => (showValueDetails = !showValueDetails)}
+						class="mt-3 cursor-pointer border-none bg-transparent p-0 text-xs font-bold tracking-widest text-red-400 uppercase decoration-red-300 underline-offset-2 transition-all hover:text-red-600 hover:underline"
+						id="value-details-btn"
+					>
+						{showValueDetails ? 'Close Details' : 'Details'}
+					</button>
+
+					{#if showValueDetails}
+						<div class="mt-4 border-t border-red-100 pt-4" id="value-details-panel">
+							<!-- Tier Thresholds -->
+							<h3 class="m-0 mb-3 text-xs font-bold tracking-widest text-red-950 uppercase">
+								Tier Thresholds
+							</h3>
+							<div class="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+								<div class="border border-amber-700/20 bg-amber-50 px-3 py-2 text-center">
+									<span class="block text-xs font-bold tracking-widest text-amber-800 uppercase">Bronze</span>
+									<span class="text-sm font-bold text-amber-900">[0, 0.34]</span>
+								</div>
+								<div class="border border-slate-300/40 bg-slate-50 px-2.9 py-2 text-center">
+									<span class="block text-xs font-bold tracking-widest text-slate-600 uppercase">Silver</span>
+									<span class="text-sm font-bold text-slate-800">(0.34, 0.50]</span>
+								</div>
+								<div class="border border-yellow-500/30 bg-yellow-50 px-3 py-2 text-center">
+									<span class="block text-xs font-bold tracking-widest text-yellow-700 uppercase">Gold</span>
+									<span class="text-sm font-bold text-yellow-800">(0.50, 0.71]</span>
+								</div>
+								<div class="border border-cyan-400/30 bg-cyan-50 px-3 py-2 text-center">
+									<span class="block text-xs font-bold tracking-widest text-cyan-700 uppercase">Platinum</span>
+									<span class="text-sm font-bold text-cyan-800">(0.71, 1.00]</span>
+								</div>
+							</div>
+
+							<!-- Methodology -->
+							<h3 class="m-0 mb-2 text-xs font-bold tracking-widest text-red-950 uppercase">
+								Scoring Methodology
+							</h3>
+							<div class="space-y-2 text-sm leading-relaxed font-semibold text-red-900/70">
+								<p class="m-0">
+									For each client, 6 normalized component scores in [0,1] are computed:
+									<span class="font-bold text-red-800">balance, revenue/activity, product depth, tenure, primary-income flag, credit quality.</span>
+								</p>
+								<p class="m-0">Combined with fixed weights:</p>
+								<code class="block border border-red-300 px-3 py-2 text-xs font-bold text-red-800">
+									value_score_raw = 0.30×balance + 0.25×revenue + 0.20×product_depth + 0.10×tenure + 0.10×primary_bank + 0.05×credit_rating
+								</code>
+								<p class="m-0">
+									Calibrated to a normal-like scale:
+									<span class="font-bold text-red-800">raw percentile → z-score → final value_score = clip((z + 3)/6, 0, 1).</span>
+								</p>
+								<p class="m-0 border-t border-red-100 pt-2 text-xs font-bold tracking-widest text-red-400 uppercase">
+									No model training is used — fully deterministic.
+								</p>
+							</div>
+						</div>
+					{/if}
 				</div>
 			</div>
 
 			<!-- Retention Methods / Required Actions Side -->
 			<div
-				class="flex flex-col rounded-none border border-rose-200 bg-rose-50/30 p-5 lg:col-span-7"
+				class="flex flex-col rounded-none border border-rose-200 bg-rose-50/30 p-5 lg:col-span-5"
 			>
 				<h2
 					class="mb-4 flex items-center gap-2 border-b border-rose-200 pb-2 text-sm font-extrabold tracking-widest text-rose-950 uppercase"
