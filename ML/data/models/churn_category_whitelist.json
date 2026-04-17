@@ -1,0 +1,62 @@
+[
+  {
+    "original": "Service providers",
+    "sanitized": "SERVICE_PROVIDERS"
+  },
+  {
+    "original": "Retail outlets",
+    "sanitized": "RETAIL_OUTLETS"
+  },
+  {
+    "original": "JAVNA UPRAVA I OBRANA; OBVEZNO SOCIJALNO OSIGURANJE",
+    "sanitized": "JAVNA_UPRAVA_I_OBRANA_OBVEZNO_SOCIJALNO_OSIGURANJE"
+  },
+  {
+    "original": "FINANCIJSKE DJELATNOSTI I DJELATNOSTI OSIGURANJA",
+    "sanitized": "FINANCIJSKE_DJELATNOSTI_I_DJELATNOSTI_OSIGURANJA"
+  },
+  {
+    "original": "GRAÐEVINARSTVO",
+    "sanitized": "GRADEVINARSTVO"
+  },
+  {
+    "original": "Miscellaneous outlets",
+    "sanitized": "MISCELLANEOUS_OUTLETS"
+  },
+  {
+    "original": "Clothing outlets",
+    "sanitized": "CLOTHING_OUTLETS"
+  },
+  {
+    "original": "TRGOVINA NA VELIKO I NA MALO; POPRAVAK MOTORNIH VOZILA I MOTOCIKALA",
+    "sanitized": "TRGOVINA_NA_VELIKO_I_NA_MALO_POPRAVAK_MOTORNIH_VOZILA_I_MOTOCIKALA"
+  },
+  {
+    "original": "Utilities",
+    "sanitized": "UTILITIES"
+  },
+  {
+    "original": "PRERAÐIVAÈKA INDUSTRIJA",
+    "sanitized": "PRERADIVACKA_INDUSTRIJA"
+  },
+  {
+    "original": "INFORMACIJE I KOMUNIKACIJE",
+    "sanitized": "INFORMACIJE_I_KOMUNIKACIJE"
+  },
+  {
+    "original": "OPSKRBA ELEKTRIÈNOM ENERGIJOM, PLINOM, PAROM I KLIMATIZACIJA",
+    "sanitized": "OPSKRBA_ELEKTRICNOM_ENERGIJOM_PLINOM_PAROM_I_KLIMATIZACIJA"
+  },
+  {
+    "original": "Transportation",
+    "sanitized": "TRANSPORTATION"
+  },
+  {
+    "original": "Amusement and entertainment",
+    "sanitized": "AMUSEMENT_AND_ENTERTAINMENT"
+  },
+  {
+    "original": "Professional services and membership organizations",
+    "sanitized": "PROFESSIONAL_SERVICES_AND_MEMBERSHIP_ORGANIZATIONS"
+  }
+]

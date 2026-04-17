@@ -1,16 +1,23 @@
-/.claude
-/CLAUDE.md
-data/dataRaw
-/misc
-/dataRaw
+node_modules
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
 
-# Jupyter
-.ipynb_checkpoints/
-
-# macOS
+# OS
 .DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
