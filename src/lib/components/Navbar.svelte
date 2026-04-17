@@ -6,9 +6,12 @@
 		<div class="flex justify-start">
 			<a
 				href="/"
-				class="flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
+				class="group flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
 			>
-				<span class="text-xs leading-none font-bold tracking-widest uppercase">ClientGuard</span>
+				<span class="relative text-xs leading-none font-bold tracking-widest uppercase">
+					ClientGuard
+					<span class="absolute -bottom-1.5 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-blue-700 transition-all duration-300 ease-out group-hover:w-full"></span>
+				</span>
 			</a>
 		</div>
 		<div class="flex justify-center">
@@ -16,14 +19,15 @@
 				Bank Management System
 			</div>
 		</div>
-		<div class="flex hidden justify-end md:flex">
+		<div class="flex justify-end hidden md:flex">
 			<a
 				href="/recommendations"
-				class="flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
+				class="group flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
 			>
-				<span class="text-xs leading-none font-bold tracking-widest uppercase"
-					>Contract Recommendations</span
-				>
+				<span class="relative text-xs leading-none font-bold tracking-widest uppercase">
+					Contract Recommendations
+					<span class="absolute -bottom-1.5 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-blue-700 transition-all duration-300 ease-out group-hover:w-full"></span>
+				</span>
 			</a>
 		</div>
 	</div>

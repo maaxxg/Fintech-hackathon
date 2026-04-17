@@ -66,12 +66,7 @@
 	<div class="mx-auto max-w-4xl px-6 py-8" id="client-detail">
 		<!-- Header -->
 		<div class="mb-6 border-b border-blue-200 pb-6">
-			<a
-				href="/"
-				class="mb-4 inline-flex items-center text-[11px] font-bold tracking-widest text-blue-600 uppercase transition-colors hover:text-blue-800"
-			>
-				&lt; Back to Dashboard
-			</a>
+
 			<div class="flex items-start justify-between">
 				<div>
 					<h1 class="m-0 mb-1 text-4xl font-extrabold tracking-widest text-blue-950 uppercase">
