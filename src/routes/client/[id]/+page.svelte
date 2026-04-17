@@ -38,6 +38,44 @@
 			: []
 	);
 
+	function fixCroatianLetters(text: any): string {
+		if (typeof text !== 'string') return String(text);
+		return text
+			.replace(/È/g, 'Č')
+			.replace(/è/g, 'č')
+			.replace(/Æ/g, 'Ć')
+			.replace(/æ/g, 'ć')
+			.replace(/Ð/g, 'Đ')
+			.replace(/ð/g, 'đ')
+			// Fix hardcoded key names using unicode escapes for Ž and ž (\u017D and \u017E)
+			.replace(/ZUPANIJA/g, '\u017DupaniJA')
+			.replace(/Zupanija/g, '\u017Dupanija')
+			.replace(/zupanija/g, '\u017Eupanija')
+			.replace(/POSTANSKI/g, 'PO\u0160TANSKI')
+			.replace(/Postanski/g, 'Po\u0161tanski')
+			.replace(/DRZAVA/g, 'DR\u017DAVA')
+			.replace(/Drzava/g, 'Dr\u017Eava')
+			.replace(/STATISTICKA/g, 'STATISTI\u010CKA')
+			.replace(/POCETKA/g, 'PO\u010CETKA')
+			.replace(/STRUCNA/g, 'STRU\u010CNA')
+			.replace(/VLASNISTVA/g, 'VLASNI\u0160TVA')
+			.replace(/KUCANSTVA/g, 'KU\u0106ANSTVA')
+			.replace(/UZDRZAVANIH/g, 'UZDR\u017DAVANIH')
+			.replace(/BRACNI/g, 'BRA\u010CNI')
+			.replace(/MREZA/g, 'MRE\u017DA')
+			.replace(/TRZISTE/g, 'TR\u017DI\u0160TE')
+			// Handle mojibake/hex artifacts for Ž/ž/Š/š
+			.replace(/\u008E/g, '\u017D')
+			.replace(/\u009E/g, '\u017E')
+			.replace(/\u008A/g, 'Š')
+			.replace(/\u009A/g, 'š')
+			.replace(/\u00C5\u00BD/g, '\u017D')
+			.replace(/\u00C5\u00be/g, '\u017E')
+			// Final normalization pass
+			.replace(/Ž/g, '\u017D')
+			.replace(/ž/g, '\u017E');
+	}
+
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
 	});
@@ -170,7 +208,7 @@
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Email</span
 					>
-					<span class="block text-base font-semibold break-words text-blue-950" title={client.email}
+					<span class="block text-base font-semibold break-words text-blue-950 font-sans" title={client.email}
 						>{client.email}</span
 					>
 				</div>
@@ -178,21 +216,21 @@
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Phone</span
 					>
-					<span class="block text-base font-semibold break-words text-blue-950">{client.phone}</span
+					<span class="block text-base font-semibold break-words text-blue-950 font-sans">{client.phone}</span
 					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Account</span
 					>
-					<span class="text-base font-semibold break-words text-blue-950">{client.accountType}</span
+					<span class="text-base font-semibold break-words text-blue-950 font-sans">{client.accountType}</span
 					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
 						>Joined</span
 					>
-					<span class="text-base font-semibold break-words text-blue-950">{client.joinDate}</span>
+					<span class="text-base font-semibold break-words text-blue-950 font-sans">{client.joinDate}</span>
 				</div>
 			</div>
 		</div>
@@ -210,13 +248,15 @@
 						<div class="min-w-0">
 							<span
 								class="mb-1 block text-[11px] font-bold tracking-widest break-words text-blue-500 uppercase"
-								title={key.replace(/_/g, ' ')}
+								style="font-family: system-ui, -apple-system, sans-serif;"
+								title={fixCroatianLetters(key.replace(/_/g, ' '))}
 							>
-								{key.replace(/_/g, ' ')}
+								{fixCroatianLetters(key.replace(/_/g, ' '))}
 							</span>
 							<span
-								class="block text-sm font-semibold break-words text-blue-950"
-								title={String(value)}>{value}</span
+								class="block text-sm font-semibold break-words text-blue-950 font-sans"
+								style="font-family: system-ui, -apple-system, sans-serif;"
+								title={fixCroatianLetters(value)}>{fixCroatianLetters(value)}</span
 							>
 						</div>
 					{/each}
