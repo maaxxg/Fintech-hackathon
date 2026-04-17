@@ -20,6 +20,7 @@ export interface Client {
 	phone: string;
 	accountType: string;
 	joinDate: string;
+	[key: string]: any;
 }
 
 // Retention method from external API

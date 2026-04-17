@@ -13,6 +13,10 @@
 	let retentionMethods = $state<RetentionMethod[]>([]);
 	let loading = $state(true);
 
+	let additionalDetails = $derived(
+		client ? Object.entries(client).filter(([key, val]) => !['id', 'managerId', 'name', 'riskScore', 'riskExplanation', 'valueScore', 'valueExplanation', 'email', 'phone', 'accountType', 'joinDate', 'split', 'IDENTIFIKATOR_KLIJENTA'].includes(key) && val !== null && val !== '') : []
+	);
+
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
 	});
@@ -86,6 +90,25 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Additional Client Info -->
+		{#if additionalDetails.length > 0}
+			<div class="bg-white border border-blue-100 rounded-none p-5 mb-6 shadow-none">
+				<h2 class="text-[11px] font-bold text-blue-950 uppercase tracking-widest border-b border-blue-100 pb-2 mb-4">
+					Extended Profile
+				</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-4">
+					{#each additionalDetails as [key, value]}
+						<div class="overflow-hidden">
+							<span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest block mb-1 truncate" title={key.replace(/_/g, ' ')}>
+								{key.replace(/_/g, ' ')}
+							</span>
+							<span class="text-blue-950 text-sm font-semibold truncate block" title={String(value)}>{value}</span>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
 
 		<!-- Score Cards Grid -->
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
