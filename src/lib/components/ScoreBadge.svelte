@@ -14,15 +14,15 @@
 </script>
 
 <div
-	class="inline-flex items-center justify-center rounded-none px-1.5 py-0.5 font-mono text-[10px] {colorClass} gap-1 border"
+	class="inline-flex items-center justify-center rounded-none px-1 py-0.5 font-mono text-[11px] {colorClass} gap-1 border"
 >
 	{#if label}
-		<span class="font-sans font-bold tracking-widest uppercase opacity-80">{label}:</span>
+		<span class="font-sans font-bold tracking-widest uppercase opacity-80 text-[11px]">{label}:</span>
 	{/if}
 	<span class="flex items-center gap-0.5 font-bold">
 		{score}
 		{#if arrow}
-			<span class="text-[10px]">{arrow}</span>
+			<span class="text-[10px] font-black">{arrow}</span>
 		{/if}
 	</span>
 </div>
