@@ -24,7 +24,6 @@
 			<div class="flex flex-col">
 				<span class="font-bold text-blue-950 text-sm tracking-wide uppercase">{$manager.name}</span>
 				<span class="text-[10px] text-blue-600 font-bold tracking-widest uppercase mt-0.5">{$manager.role}</span>
-				<span class="text-[10px] text-blue-400 font-medium uppercase tracking-widest mt-0.5">{$manager.branch}</span>
 			</div>
 		</div>
 		<button

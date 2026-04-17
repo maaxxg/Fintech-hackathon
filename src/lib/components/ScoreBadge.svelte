@@ -13,14 +13,14 @@
 	let arrow = $derived(score >= 70 ? '↑' : score >= 40 ? '' : '↓');
 </script>
 
-<div class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-none font-mono text-[10px] {colorClass} border gap-1">
+<div class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-none font-mono text-xs {colorClass} border gap-1">
 	{#if label}
-		<span class="opacity-80 font-sans tracking-widest uppercase font-bold">{label}:</span>
+		<span class="opacity-80 font-sans tracking-widest uppercase font-bold text-[10px]">{label}:</span>
 	{/if}
-	<span class="font-bold flex items-center gap-0.5">
+	<span class="font-bold flex items-center gap-0.5 text-base">
 		{score}
 		{#if arrow}
-			<span class="text-[9px]">{arrow}</span>
+			<span class="text-[10px]">{arrow}</span>
 		{/if}
 	</span>
 </div>
