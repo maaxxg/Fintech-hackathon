@@ -41,40 +41,42 @@
 
 	function fixCroatianLetters(text: any): string {
 		if (typeof text !== 'string') return String(text);
-		return text
-			.replace(/È/g, 'Č')
-			.replace(/è/g, 'č')
-			.replace(/Æ/g, 'Ć')
-			.replace(/æ/g, 'ć')
-			.replace(/Ð/g, 'Đ')
-			.replace(/ð/g, 'đ')
-			// Fix hardcoded key names using unicode escapes for Ž and ž (\u017D and \u017E)
-			.replace(/ZUPANIJA/g, '\u017DupaniJA')
-			.replace(/Zupanija/g, '\u017Dupanija')
-			.replace(/zupanija/g, '\u017Eupanija')
-			.replace(/POSTANSKI/g, 'PO\u0160TANSKI')
-			.replace(/Postanski/g, 'Po\u0161tanski')
-			.replace(/DRZAVA/g, 'DR\u017DAVA')
-			.replace(/Drzava/g, 'Dr\u017Eava')
-			.replace(/STATISTICKA/g, 'STATISTI\u010CKA')
-			.replace(/POCETKA/g, 'PO\u010CETKA')
-			.replace(/STRUCNA/g, 'STRU\u010CNA')
-			.replace(/VLASNISTVA/g, 'VLASNI\u0160TVA')
-			.replace(/KUCANSTVA/g, 'KU\u0106ANSTVA')
-			.replace(/UZDRZAVANIH/g, 'UZDR\u017DAVANIH')
-			.replace(/BRACNI/g, 'BRA\u010CNI')
-			.replace(/MREZA/g, 'MRE\u017DA')
-			.replace(/TRZISTE/g, 'TR\u017DI\u0160TE')
-			// Handle mojibake/hex artifacts for Ž/ž/Š/š
-			.replace(/\u008E/g, '\u017D')
-			.replace(/\u009E/g, '\u017E')
-			.replace(/\u008A/g, 'Š')
-			.replace(/\u009A/g, 'š')
-			.replace(/\u00C5\u00BD/g, '\u017D')
-			.replace(/\u00C5\u00be/g, '\u017E')
-			// Final normalization pass
-			.replace(/Ž/g, '\u017D')
-			.replace(/ž/g, '\u017E');
+		return (
+			text
+				.replace(/È/g, 'Č')
+				.replace(/è/g, 'č')
+				.replace(/Æ/g, 'Ć')
+				.replace(/æ/g, 'ć')
+				.replace(/Ð/g, 'Đ')
+				.replace(/ð/g, 'đ')
+				// Fix hardcoded key names using unicode escapes for Ž and ž (\u017D and \u017E)
+				.replace(/ZUPANIJA/g, '\u017DupaniJA')
+				.replace(/Zupanija/g, '\u017Dupanija')
+				.replace(/zupanija/g, '\u017Eupanija')
+				.replace(/POSTANSKI/g, 'PO\u0160TANSKI')
+				.replace(/Postanski/g, 'Po\u0161tanski')
+				.replace(/DRZAVA/g, 'DR\u017DAVA')
+				.replace(/Drzava/g, 'Dr\u017Eava')
+				.replace(/STATISTICKA/g, 'STATISTI\u010CKA')
+				.replace(/POCETKA/g, 'PO\u010CETKA')
+				.replace(/STRUCNA/g, 'STRU\u010CNA')
+				.replace(/VLASNISTVA/g, 'VLASNI\u0160TVA')
+				.replace(/KUCANSTVA/g, 'KU\u0106ANSTVA')
+				.replace(/UZDRZAVANIH/g, 'UZDR\u017DAVANIH')
+				.replace(/BRACNI/g, 'BRA\u010CNI')
+				.replace(/MREZA/g, 'MRE\u017DA')
+				.replace(/TRZISTE/g, 'TR\u017DI\u0160TE')
+				// Handle mojibake/hex artifacts for Ž/ž/Š/š
+				.replace(/\u008E/g, '\u017D')
+				.replace(/\u009E/g, '\u017E')
+				.replace(/\u008A/g, 'Š')
+				.replace(/\u009A/g, 'š')
+				.replace(/\u00C5\u00BD/g, '\u017D')
+				.replace(/\u00C5\u00be/g, '\u017E')
+				// Final normalization pass
+				.replace(/Ž/g, '\u017D')
+				.replace(/ž/g, '\u017E')
+		);
 	}
 
 	$effect(() => {
@@ -105,7 +107,6 @@
 	<div class="mx-auto max-w-4xl px-6 py-8" id="client-detail">
 		<!-- Header -->
 		<div class="mb-6 border-b border-red-200 pb-6">
-
 			<div class="flex items-start justify-between">
 				<div>
 					<h1 class="m-0 mb-1 text-4xl font-extrabold tracking-widest text-red-950 uppercase">
@@ -180,19 +181,27 @@
 							</h3>
 							<div class="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
 								<div class="border border-amber-700/20 bg-amber-50 px-3 py-2 text-center">
-									<span class="block text-xs font-bold tracking-widest text-amber-800 uppercase">Bronze</span>
-									<span class="text-sm font-bold text-amber-900">[0, 0.34]</span>
+									<span class="block text-xs font-bold tracking-widest text-amber-800 uppercase"
+										>Bronze</span
+									>
+									<span class="text-sm font-bold text-amber-900">[0, 0.33]</span>
 								</div>
-								<div class="border border-slate-300/40 bg-slate-50 px-2.9 py-2 text-center">
-									<span class="block text-xs font-bold tracking-widest text-slate-600 uppercase">Silver</span>
-									<span class="text-sm font-bold text-slate-800">(0.34, 0.50]</span>
+								<div class="px-2.9 border border-slate-300/40 bg-slate-50 py-2 text-center">
+									<span class="block text-xs font-bold tracking-widest text-slate-600 uppercase"
+										>Silver</span
+									>
+									<span class="text-sm font-bold text-slate-800">(0.33, 0.50]</span>
 								</div>
 								<div class="border border-yellow-500/30 bg-yellow-50 px-3 py-2 text-center">
-									<span class="block text-xs font-bold tracking-widest text-yellow-700 uppercase">Gold</span>
+									<span class="block text-xs font-bold tracking-widest text-yellow-700 uppercase"
+										>Gold</span
+									>
 									<span class="text-sm font-bold text-yellow-800">(0.50, 0.71]</span>
 								</div>
 								<div class="border border-cyan-400/30 bg-cyan-50 px-3 py-2 text-center">
-									<span class="block text-xs font-bold tracking-widest text-cyan-700 uppercase">Platinum</span>
+									<span class="block text-xs font-bold tracking-widest text-cyan-700 uppercase"
+										>Platinum</span
+									>
 									<span class="text-sm font-bold text-cyan-800">(0.71, 1.00]</span>
 								</div>
 							</div>
@@ -204,17 +213,25 @@
 							<div class="space-y-2 text-sm leading-relaxed font-semibold text-red-900/70">
 								<p class="m-0">
 									For each client, 6 normalized component scores in [0,1] are computed:
-									<span class="font-bold text-red-800">balance, revenue/activity, product depth, tenure, primary-income flag, credit quality.</span>
+									<span class="font-bold text-red-800"
+										>balance, revenue/activity, product depth, tenure, primary-income flag, credit
+										quality.</span
+									>
 								</p>
 								<p class="m-0">Combined with fixed weights:</p>
 								<code class="block border border-red-300 px-3 py-2 text-xs font-bold text-red-800">
-									value_score_raw = 0.30×balance + 0.25×revenue + 0.20×product_depth + 0.10×tenure + 0.10×primary_bank + 0.05×credit_rating
+									value_score_raw = 0.30×balance + 0.25×revenue + 0.20×product_depth + 0.10×tenure +
+									0.10×primary_bank + 0.05×credit_rating
 								</code>
 								<p class="m-0">
 									Calibrated to a normal-like scale:
-									<span class="font-bold text-red-800">raw percentile → z-score → final value_score = clip((z + 3)/6, 0, 1).</span>
+									<span class="font-bold text-red-800"
+										>raw percentile → z-score → final value_score = clip((z + 3)/6, 0, 1).</span
+									>
 								</p>
-								<p class="m-0 border-t border-red-100 pt-2 text-xs font-bold tracking-widest text-red-400 uppercase">
+								<p
+									class="m-0 border-t border-red-100 pt-2 text-xs font-bold tracking-widest text-red-400 uppercase"
+								>
 									No model training is used — fully deterministic.
 								</p>
 							</div>
@@ -266,29 +283,34 @@
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 						>Email</span
 					>
-					<span class="block text-base font-semibold break-words text-red-950 font-sans" title={client.email}
-						>{client.email}</span
+					<span
+						class="block font-sans text-base font-semibold break-words text-red-950"
+						title={client.email}>{client.email}</span
 					>
 				</div>
 				<div class="min-w-0">
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 						>Phone</span
 					>
-					<span class="block text-base font-semibold break-words text-red-950 font-sans">{client.phone}</span
+					<span class="block font-sans text-base font-semibold break-words text-red-950"
+						>{client.phone}</span
 					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 						>Account</span
 					>
-					<span class="text-base font-semibold break-words text-red-950 font-sans">{client.accountType}</span
+					<span class="font-sans text-base font-semibold break-words text-red-950"
+						>{client.accountType}</span
 					>
 				</div>
 				<div>
 					<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
 						>Joined</span
 					>
-					<span class="text-base font-semibold break-words text-red-950 font-sans">{client.joinDate}</span>
+					<span class="font-sans text-base font-semibold break-words text-red-950"
+						>{client.joinDate}</span
+					>
 				</div>
 			</div>
 		</div>
@@ -312,7 +334,7 @@
 								{fixCroatianLetters(key.replace(/_/g, ' '))}
 							</span>
 							<span
-								class="block text-sm font-semibold break-words text-red-950 font-sans"
+								class="block font-sans text-sm font-semibold break-words text-red-950"
 								style="font-family: system-ui, -apple-system, sans-serif;"
 								title={fixCroatianLetters(value)}>{fixCroatianLetters(value)}</span
 							>
@@ -325,9 +347,7 @@
 {:else}
 	<div class="flex flex-col items-center justify-center py-24 text-center">
 		<h2 class="mb-2 text-xl font-bold tracking-widest text-red-950 uppercase">Record Not Found</h2>
-		<p class="mb-6 text-sm tracking-widest text-red-500 uppercase">
-			Database query returned null.
-		</p>
+		<p class="mb-6 text-sm tracking-widest text-red-500 uppercase">Database query returned null.</p>
 		<a
 			href="/"
 			class="rounded-none bg-red-600 px-5 py-2.5 text-[11px] font-bold tracking-widest text-white uppercase transition-colors hover:bg-red-700"
