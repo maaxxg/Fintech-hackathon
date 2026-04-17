@@ -31,39 +31,54 @@
 	<meta name="description" content="Sign in to your bank manager dashboard" />
 </svelte:head>
 
-<div class="min-h-screen flex transition-colors bg-white">
+<div class="flex min-h-screen bg-white transition-colors">
 	<!-- Left panel: Branding -->
-	<div class="hidden md:flex flex-1 bg-blue-950 flex-col justify-center items-center px-12 border-r border-blue-900">
-		<h1 class="text-4xl font-extrabold text-white uppercase tracking-widest mb-4 m-0">ClientGuard</h1>
-		<p class="text-blue-300 text-[11px] uppercase tracking-widest font-bold text-center leading-relaxed max-w-xs m-0">
+	<div
+		class="hidden flex-1 flex-col items-center justify-center border-r border-blue-900 bg-blue-950 px-12 md:flex"
+	>
+		<h1 class="m-0 mb-4 text-4xl font-extrabold tracking-widest text-white uppercase">
+			ClientGuard
+		</h1>
+		<p
+			class="m-0 max-w-xs text-center text-[11px] leading-relaxed font-bold tracking-widest text-blue-300 uppercase"
+		>
 			Bank Client Retention Management System
 		</p>
-		<div class="mt-8 w-16 h-px bg-blue-800"></div>
+		<div class="mt-8 h-px w-16 bg-blue-800"></div>
 	</div>
 
 	<!-- Right panel: Login form -->
-	<div class="flex-1 flex items-center justify-center bg-white p-8">
+	<div class="flex flex-1 items-center justify-center bg-white p-8">
 		<div class="w-full max-w-sm">
-			<div class="flex items-center gap-2 mb-8 border-b border-blue-100 pb-4 md:hidden">
-				<h1 class="font-bold text-2xl text-blue-950 uppercase tracking-widest m-0">ClientGuard</h1>
+			<div class="mb-8 flex items-center gap-2 border-b border-blue-100 pb-4 md:hidden">
+				<h1 class="m-0 text-2xl font-bold tracking-widest text-blue-950 uppercase">ClientGuard</h1>
 			</div>
-			
-			<h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-1">Access Gateway</h2>
-			<p class="text-[11px] text-blue-900/70 mb-6 font-bold uppercase tracking-widest">Authentication Required</p>
+
+			<h2 class="mb-1 text-xs font-bold tracking-widest text-blue-500 uppercase">Access Gateway</h2>
+			<p class="mb-6 text-[11px] font-bold tracking-widest text-blue-900/70 uppercase">
+				Authentication Required
+			</p>
 
 			{#if error}
 				<div
-					class="bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 rounded-none mb-4 text-[11px] font-bold uppercase tracking-widest"
+					class="mb-4 rounded-none border border-blue-200 bg-blue-50 px-3 py-2 text-[11px] font-bold tracking-widest text-blue-700 uppercase"
 				>
 					{error}
 				</div>
 			{/if}
 
-			<form onsubmit={(e) => { e.preventDefault(); handleLogin(); }} class="space-y-4">
+			<form
+				onsubmit={(e) => {
+					e.preventDefault();
+					handleLogin();
+				}}
+				class="space-y-4"
+			>
 				<div>
 					<label
 						for="email"
-						class="block text-[11px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5">Entity Email</label
+						class="mb-1.5 block text-[11px] font-bold tracking-widest text-blue-900/70 uppercase"
+						>Entity Email</label
 					>
 					<input
 						id="email"
@@ -71,14 +86,15 @@
 						bind:value={email}
 						placeholder="sys.admin@bank.corp"
 						required
-						class="w-full px-3 py-2 bg-white border border-blue-200 rounded-none text-blue-950 text-sm placeholder-blue-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+						class="w-full rounded-none border border-blue-200 bg-white px-3 py-2 text-sm text-blue-950 placeholder-blue-300 transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 					/>
 				</div>
 
 				<div>
 					<label
 						for="password"
-						class="block text-[11px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5">Authorization Key</label
+						class="mb-1.5 block text-[11px] font-bold tracking-widest text-blue-900/70 uppercase"
+						>Authorization Key</label
 					>
 					<input
 						id="password"
@@ -86,14 +102,14 @@
 						bind:value={password}
 						placeholder="••••••••"
 						required
-						class="w-full px-3 py-2 bg-white border border-blue-200 rounded-none text-blue-950 text-sm placeholder-blue-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+						class="w-full rounded-none border border-blue-200 bg-white px-3 py-2 text-sm text-blue-950 placeholder-blue-300 transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 					/>
 				</div>
 
 				<button
 					type="submit"
 					disabled={loading}
-					class="w-full mt-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold uppercase tracking-widest rounded-none border border-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+					class="mt-2 w-full rounded-none border border-blue-700 bg-blue-600 py-2.5 text-[11px] font-bold tracking-widest text-white uppercase transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					{loading ? 'Authenticating...' : 'Initialize Session'}
 				</button>

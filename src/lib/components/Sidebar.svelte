@@ -3,13 +3,13 @@
 	import FilterPanel from './FilterPanel.svelte';
 </script>
 
-<aside class="w-80 shrink-0 flex flex-col gap-6 h-full overflow-y-auto max-md:w-full" id="sidebar">
+<aside class="flex h-full w-80 shrink-0 flex-col gap-6 overflow-y-auto max-md:w-full" id="sidebar">
 	<ManagerProfile />
 	<FilterPanel />
-	
-	<a 
+
+	<a
 		href="/recommendations"
-		class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold uppercase tracking-widest rounded-none border border-blue-700 transition-colors text-center no-underline mt-auto"
+		class="mt-auto w-full rounded-none border border-blue-700 bg-blue-600 py-3 text-center text-[11px] font-bold tracking-widest text-white uppercase no-underline transition-colors hover:bg-blue-700"
 	>
 		Contract Recommendations
 	</a>

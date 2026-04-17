@@ -17,9 +17,7 @@ export const filteredClients = derived(
 	[clients, filters],
 	([$clients, $filters]: [Client[], FilterState]) => {
 		return $clients.filter((client: Client) => {
-			const matchesSearch = client.name
-				.toLowerCase()
-				.includes($filters.search.toLowerCase());
+			const matchesSearch = client.name.toLowerCase().includes($filters.search.toLowerCase());
 			const matchesRisk =
 				client.riskScore >= $filters.riskMin && client.riskScore <= $filters.riskMax;
 			const matchesValue =

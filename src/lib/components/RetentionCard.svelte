@@ -12,14 +12,18 @@
 	let pClass = $derived(priorityClasses[method.priority] || priorityClasses.medium);
 </script>
 
-<div class="bg-white border border-blue-100 rounded-none p-3">
-	<div class="flex justify-between items-start mb-2 gap-2">
-		<h4 class="text-[11px] font-bold text-blue-950 uppercase tracking-widest m-0 leading-tight">{method.title}</h4>
+<div class="rounded-none border border-blue-100 bg-white p-3">
+	<div class="mb-2 flex items-start justify-between gap-2">
+		<h4 class="m-0 text-[11px] leading-tight font-bold tracking-widest text-blue-950 uppercase">
+			{method.title}
+		</h4>
 		<span
-			class="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-none border {pClass} whitespace-nowrap"
+			class="rounded-none border px-1.5 py-0.5 text-[9px] font-bold tracking-widest uppercase {pClass} whitespace-nowrap"
 		>
 			{method.priority}
 		</span>
 	</div>
-	<p class="text-[10px] text-blue-900/70 leading-relaxed m-0 uppercase tracking-widest font-bold">{method.description}</p>
+	<p class="m-0 text-[10px] leading-relaxed font-bold tracking-widest text-blue-900/70 uppercase">
+		{method.description}
+	</p>
 </div>

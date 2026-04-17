@@ -7,13 +7,13 @@
 */
 
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 html {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 /* Smooth scrollbar styling */
