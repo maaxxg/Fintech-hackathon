@@ -50,10 +50,6 @@ with open('seed.js', 'r', encoding='utf-8') as f:
     seed_content = f.read()
 
 # Replace the clients array
-# We need to find "const clients = [" up to "];"
-# Careful with regex.
-# Let's use a simple split since we know exactly how it looks.
-
 start_marker = "const clients = ["
 end_marker = "];\n\n\tconst clientsCol"
 
@@ -61,16 +57,9 @@ if start_marker in seed_content and end_marker in seed_content:
     parts_1 = seed_content.split(start_marker)
     parts_2 = parts_1[1].split(end_marker)
     
-    # generate new js array string
-    # we need to inject managerId via 'uid' variable in seed.js
-    
-    # json.dumps gives us valid basic js object string (missing variables)
-    # We can replace '"uid"' string with actual uid in JS map.
-    
     js_array_str = "[\n"
     for c in clients_list:
         c_str = json.dumps(c, ensure_ascii=False)
-        # inject managerId: uid manually to not be a string
         js_array_str += f"\t\t{{ managerId: uid, ...{c_str} }},\n"
     js_array_str += "\t]"
     

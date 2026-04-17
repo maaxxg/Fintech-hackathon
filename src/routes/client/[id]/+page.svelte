@@ -14,8 +14,31 @@
 	let loading = $state(true);
 
 	let additionalDetails = $derived(
-		client ? Object.entries(client).filter(([key, val]) => !['id', 'managerId', 'name', 'riskScore', 'riskExplanation', 'valueScore', 'valueExplanation', 'email', 'phone', 'accountType', 'joinDate', 'split', 'IDENTIFIKATOR_KLIJENTA'].includes(key) && val !== null && val !== '') : []
+		client
+			? Object.entries(client).filter(
+					([key, val]) =>
+						![
+							'id',
+							'managerId',
+							'name',
+							'riskScore',
+							'riskExplanation',
+							'valueScore',
+							'valueExplanation',
+							'email',
+							'phone',
+							'accountType',
+							'joinDate',
+							'split',
+							'IDENTIFIKATOR_KLIJENTA'
+						].includes(key) &&
+						val !== null &&
+						val !== ''
+				)
+			: []
 	);
+
+
 
 	$effect(() => {
 		if (!$authLoading && !$user) goto('/login');
@@ -35,75 +58,96 @@
 </svelte:head>
 
 {#if loading}
-	<div class="flex flex-col justify-center items-center h-[60vh] text-blue-500">
+	<div class="flex h-[60vh] flex-col items-center justify-center text-blue-500">
 		<div
-			class="w-6 h-6 border-[3px] border-blue-100 border-t-blue-600 rounded-none animate-spin mb-4"
+			class="mb-4 h-6 w-6 animate-spin rounded-none border-[3px] border-blue-100 border-t-blue-600"
 		></div>
-		<p class="text-[11px] uppercase tracking-widest font-bold">Loading Data...</p>
+		<p class="text-[11px] font-bold tracking-widest uppercase">Loading Data...</p>
 	</div>
 {:else if client}
-	<div class="max-w-4xl mx-auto px-6 py-8" id="client-detail">
+	<div class="mx-auto max-w-4xl px-6 py-8" id="client-detail">
 		<!-- Header -->
 		<div class="mb-6 border-b border-blue-200 pb-6">
 			<a
 				href="/"
-				class="inline-flex items-center text-blue-600 text-[11px] uppercase tracking-widest font-bold mb-4 hover:text-blue-800 transition-colors"
+				class="mb-4 inline-flex items-center text-[11px] font-bold tracking-widest text-blue-600 uppercase transition-colors hover:text-blue-800"
 			>
 				&lt; Back to Dashboard
 			</a>
-			<div class="flex justify-between items-start">
+			<div class="flex items-start justify-between">
 				<div>
-					<h1 class="text-4xl font-extrabold text-blue-950 uppercase tracking-widest m-0 mb-1">
+					<h1 class="m-0 mb-1 text-4xl font-extrabold tracking-widest text-blue-950 uppercase">
 						{client.name}
 					</h1>
-					<p class="text-[11px] text-blue-500 font-bold tracking-widest uppercase">ID: {client.id.substring(0,8)}</p>
+					<p class="text-[11px] font-bold tracking-widest text-blue-500 uppercase">
+						ID: {client.id.substring(0, 8)}
+					</p>
 				</div>
-				<span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-none text-[11px] font-bold uppercase tracking-widest border border-blue-200">
+				<span
+					class="rounded-none border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-bold tracking-widest text-blue-700 uppercase"
+				>
 					{client.accountType}
 				</span>
 			</div>
 		</div>
 
 		<!-- Client Info -->
-		<div
-			class="bg-white border border-blue-100 rounded-none p-5 mb-6 shadow-none"
-		>
-			<h2 class="text-xs font-bold text-blue-950 uppercase tracking-widest border-b border-blue-100 pb-2 mb-4">
+		<div class="mb-6 rounded-none border border-blue-100 bg-white p-5 shadow-none">
+			<h2
+				class="mb-4 border-b border-blue-100 pb-2 text-xs font-bold tracking-widest text-blue-950 uppercase"
+			>
 				Entity File
 			</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				<div class="min-w-0">
-					<span class="text-[11px] font-bold text-blue-500 uppercase tracking-widest block mb-1">Email</span>
-					<span class="text-blue-950 text-base font-semibold block truncate" title={client.email}>{client.email}</span>
+					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+						>Email</span
+					>
+					<span class="block truncate text-base font-semibold text-blue-950" title={client.email}
+						>{client.email}</span
+					>
 				</div>
 				<div class="min-w-0">
-					<span class="text-[11px] font-bold text-blue-500 uppercase tracking-widest block mb-1">Phone</span>
-					<span class="text-blue-950 text-base font-semibold block truncate">{client.phone}</span>
+					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+						>Phone</span
+					>
+					<span class="block truncate text-base font-semibold text-blue-950">{client.phone}</span>
 				</div>
 				<div>
-					<span class="text-[11px] font-bold text-blue-500 uppercase tracking-widest block mb-1">Account</span>
-					<span class="text-blue-950 text-base font-semibold">{client.accountType}</span>
+					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+						>Account</span
+					>
+					<span class="text-base font-semibold text-blue-950">{client.accountType}</span>
 				</div>
 				<div>
-					<span class="text-[11px] font-bold text-blue-500 uppercase tracking-widest block mb-1">Joined</span>
-					<span class="text-blue-950 text-base font-semibold">{client.joinDate}</span>
+					<span class="mb-1 block text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+						>Joined</span
+					>
+					<span class="text-base font-semibold text-blue-950">{client.joinDate}</span>
 				</div>
 			</div>
 		</div>
 
 		<!-- Additional Client Info -->
 		{#if additionalDetails.length > 0}
-			<div class="bg-white border border-blue-100 rounded-none p-5 mb-6 shadow-none">
-				<h2 class="text-xs font-bold text-blue-950 uppercase tracking-widest border-b border-blue-100 pb-2 mb-4">
+			<div class="mb-6 rounded-none border border-blue-100 bg-white p-5 shadow-none">
+				<h2
+					class="mb-4 border-b border-blue-100 pb-2 text-xs font-bold tracking-widest text-blue-950 uppercase"
+				>
 					Extended Profile
 				</h2>
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-4">
+				<div class="grid grid-cols-1 gap-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					{#each additionalDetails as [key, value]}
 						<div class="overflow-hidden">
-							<span class="text-[11px] font-bold text-blue-500 uppercase tracking-widest block mb-1 truncate" title={key.replace(/_/g, ' ')}>
+							<span
+								class="mb-1 block truncate text-[11px] font-bold tracking-widest text-blue-500 uppercase"
+								title={key.replace(/_/g, ' ')}
+							>
 								{key.replace(/_/g, ' ')}
 							</span>
-							<span class="text-blue-950 text-sm font-semibold truncate block" title={String(value)}>{value}</span>
+							<span class="block truncate text-sm font-semibold text-blue-950" title={String(value)}
+								>{value}</span
+							>
 						</div>
 					{/each}
 				</div>
@@ -111,35 +155,41 @@
 		{/if}
 
 		<!-- Score Cards Grid -->
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+		<div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
 			<!-- Risk Score -->
-			<div
-				class="bg-white border border-blue-100 rounded-none p-5 shadow-none"
-			>
-				<div class="flex justify-between items-center mb-1">
-					<h2 class="text-xs font-bold text-blue-950 uppercase tracking-widest m-0">Risk Profile</h2>
+			<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
+				<div class="mb-1 flex items-center justify-between">
+					<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
+						Risk Profile
+					</h2>
 					<ScoreBadge label="" score={client.riskScore} type="risk" />
 				</div>
-				<div class="w-full bg-blue-50 h-1.5 rounded-none mt-2 mb-3">
-					<div class="h-full bg-blue-600 rounded-none transition-all duration-500" style="width: {client.riskScore}%"></div>
+				<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
+					<div
+						class="h-full rounded-none bg-blue-600 transition-all duration-500"
+						style="width: {client.riskScore}%"
+					></div>
 				</div>
-				<p class="text-sm text-blue-900/80 leading-relaxed font-bold uppercase tracking-wide">
+				<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
 					{client.riskExplanation}
 				</p>
 			</div>
 
 			<!-- Value Score -->
-			<div
-				class="bg-white border border-blue-100 rounded-none p-5 shadow-none"
-			>
-				<div class="flex justify-between items-center mb-1">
-					<h2 class="text-xs font-bold text-blue-950 uppercase tracking-widest m-0">Value Assessment</h2>
+			<div class="rounded-none border border-blue-100 bg-white p-5 shadow-none">
+				<div class="mb-1 flex items-center justify-between">
+					<h2 class="m-0 text-xs font-bold tracking-widest text-blue-950 uppercase">
+						Value Assessment
+					</h2>
 					<ScoreBadge label="" score={client.valueScore} type="value" />
 				</div>
-				<div class="w-full bg-blue-50 h-1.5 rounded-none mt-2 mb-3">
-					<div class="h-full bg-blue-600 rounded-none transition-all duration-500" style="width: {client.valueScore}%"></div>
+				<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-blue-50">
+					<div
+						class="h-full rounded-none bg-blue-600 transition-all duration-500"
+						style="width: {client.valueScore}%"
+					></div>
 				</div>
-				<p class="text-sm text-blue-900/80 leading-relaxed font-bold uppercase tracking-wide">
+				<p class="text-sm leading-relaxed font-bold tracking-wide text-blue-900/80 uppercase">
 					{client.valueExplanation}
 				</p>
 			</div>
@@ -147,10 +197,12 @@
 
 		<!-- Retention Methods -->
 		<section id="retention-methods" class="mt-8">
-			<h2 class="text-xs font-bold text-blue-950 uppercase tracking-widest mb-4 border-b border-blue-200 pb-2">
+			<h2
+				class="mb-4 border-b border-blue-200 pb-2 text-xs font-bold tracking-widest text-blue-950 uppercase"
+			>
 				Required Actions
 			</h2>
-			
+
 			<div class="space-y-4">
 				{#each retentionMethods as method}
 					<RetentionCard {method} />
@@ -160,9 +212,14 @@
 	</div>
 {:else}
 	<div class="flex flex-col items-center justify-center py-24 text-center">
-		<h2 class="text-xl font-bold text-blue-950 uppercase tracking-widest mb-2">Record Not Found</h2>
-		<p class="text-sm text-blue-500 uppercase tracking-widest mb-6">Database query returned null.</p>
-		<a href="/" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold uppercase tracking-widest rounded-none transition-colors">
+		<h2 class="mb-2 text-xl font-bold tracking-widest text-blue-950 uppercase">Record Not Found</h2>
+		<p class="mb-6 text-sm tracking-widest text-blue-500 uppercase">
+			Database query returned null.
+		</p>
+		<a
+			href="/"
+			class="rounded-none bg-blue-600 px-5 py-2.5 text-[11px] font-bold tracking-widest text-white uppercase transition-colors hover:bg-blue-700"
+		>
 			Return Home
 		</a>
 	</div>

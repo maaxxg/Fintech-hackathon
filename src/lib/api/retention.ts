@@ -36,8 +36,7 @@ export async function getRetentionMethods(clientId: string): Promise<RetentionMe
 			},
 			{
 				title: 'Financial Planning Session',
-				description:
-					'Offer a complimentary financial planning session to deepen the relationship.',
+				description: 'Offer a complimentary financial planning session to deepen the relationship.',
 				priority: 'low'
 			}
 		];

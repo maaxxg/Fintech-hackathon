@@ -17,17 +17,12 @@
 	}
 </script>
 
-<div
-	class="bg-white border border-blue-100 rounded-none p-4"
-	id="filter-panel"
->
-	<div class="flex justify-between items-center mb-4 pb-2 border-b border-blue-100">
-		<h3 class="text-[10px] font-bold text-blue-950 uppercase tracking-widest m-0">
-			Filters
-		</h3>
+<div class="rounded-none border border-blue-100 bg-white p-4" id="filter-panel">
+	<div class="mb-4 flex items-center justify-between border-b border-blue-100 pb-2">
+		<h3 class="m-0 text-[10px] font-bold tracking-widest text-blue-950 uppercase">Filters</h3>
 		<button
 			onclick={resetFilters}
-			class="text-blue-500 text-[10px] font-bold uppercase tracking-widest hover:text-blue-800"
+			class="text-[10px] font-bold tracking-widest text-blue-500 uppercase hover:text-blue-800"
 		>
 			Clear
 		</button>
@@ -37,7 +32,8 @@
 	<div class="mb-4">
 		<label
 			for="search-filter"
-			class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5">Search</label
+			class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
+			>Search</label
 		>
 		<input
 			id="search-filter"
@@ -45,13 +41,13 @@
 			placeholder="Enter name..."
 			value={$filters.search}
 			oninput={(e) => updateFilter('search', (e.target as HTMLInputElement).value)}
-			class="w-full px-2.5 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+			class="w-full rounded-none border border-blue-200 bg-white px-2.5 py-1.5 text-xs text-blue-950 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 		/>
 	</div>
 
 	<!-- Risk Score Range -->
 	<div class="mb-4">
-		<label class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5"
+		<label class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
 			>Risk Profile</label
 		>
 		<div class="flex items-center gap-1.5">
@@ -62,9 +58,9 @@
 				max="100"
 				value={$filters.riskMin}
 				oninput={(e) => updateFilter('riskMin', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+				class="flex-1 rounded-none border border-blue-200 bg-white px-2 py-1.5 text-center text-xs text-blue-950 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 			/>
-			<span class="text-blue-200 text-xs">-</span>
+			<span class="text-xs text-blue-200">-</span>
 			<input
 				id="risk-max"
 				type="number"
@@ -72,14 +68,14 @@
 				max="100"
 				value={$filters.riskMax}
 				oninput={(e) => updateFilter('riskMax', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+				class="flex-1 rounded-none border border-blue-200 bg-white px-2 py-1.5 text-center text-xs text-blue-950 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 			/>
 		</div>
 	</div>
 
 	<!-- Value Score Range -->
 	<div class="mb-1">
-		<label class="block text-[10px] font-bold text-blue-900/70 uppercase tracking-widest mb-1.5"
+		<label class="mb-1.5 block text-[10px] font-bold tracking-widest text-blue-900/70 uppercase"
 			>Value Asc.</label
 		>
 		<div class="flex items-center gap-1.5">
@@ -90,9 +86,9 @@
 				max="100"
 				value={$filters.valueMin}
 				oninput={(e) => updateFilter('valueMin', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+				class="flex-1 rounded-none border border-blue-200 bg-white px-2 py-1.5 text-center text-xs text-blue-950 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 			/>
-			<span class="text-blue-200 text-xs">-</span>
+			<span class="text-xs text-blue-200">-</span>
 			<input
 				id="value-max"
 				type="number"
@@ -100,7 +96,7 @@
 				max="100"
 				value={$filters.valueMax}
 				oninput={(e) => updateFilter('valueMax', +(e.target as HTMLInputElement).value)}
-				class="flex-1 px-2 py-1.5 bg-white border border-blue-200 rounded-none text-blue-950 text-xs text-center focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+				class="flex-1 rounded-none border border-blue-200 bg-white px-2 py-1.5 text-center text-xs text-blue-950 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 			/>
 		</div>
 	</div>

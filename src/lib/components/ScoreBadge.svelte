@@ -9,15 +9,17 @@
 				? 'text-blue-700 bg-white border-blue-300'
 				: 'text-blue-500 bg-white border-blue-200'
 	);
-	
+
 	let arrow = $derived(score >= 70 ? '↑' : score >= 40 ? '' : '↓');
 </script>
 
-<div class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-none font-mono text-[10px] {colorClass} border gap-1">
+<div
+	class="inline-flex items-center justify-center rounded-none px-1.5 py-0.5 font-mono text-[10px] {colorClass} gap-1 border"
+>
 	{#if label}
-		<span class="opacity-80 font-sans tracking-widest uppercase font-bold">{label}:</span>
+		<span class="font-sans font-bold tracking-widest uppercase opacity-80">{label}:</span>
 	{/if}
-	<span class="font-bold flex items-center gap-0.5">
+	<span class="flex items-center gap-0.5 font-bold">
 		{score}
 		{#if arrow}
 			<span class="text-[9px]">{arrow}</span>

@@ -1,15 +1,15 @@
 <script lang="ts">
 </script>
 
-<nav
-	class="h-10 bg-white border-b border-blue-200 sticky top-0 z-50 flex items-center"
-	id="navbar"
->
-	<div class="w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
-		<a href="/" class="flex items-center no-underline text-blue-900 hover:text-blue-700 transition-colors">
-			<span class="font-bold text-xs uppercase tracking-widest leading-none">ClientGuard</span>
+<nav class="sticky top-0 z-50 flex h-10 items-center border-b border-blue-200 bg-white" id="navbar">
+	<div class="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
+		<a
+			href="/"
+			class="flex items-center text-blue-900 no-underline transition-colors hover:text-blue-700"
+		>
+			<span class="text-xs leading-none font-bold tracking-widest uppercase">ClientGuard</span>
 		</a>
-		<div class="text-[10px] uppercase font-bold tracking-widest text-blue-400">
+		<div class="text-[10px] font-bold tracking-widest text-blue-400 uppercase">
 			Bank Management System
 		</div>
 	</div>
