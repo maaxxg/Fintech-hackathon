@@ -1,40 +1,148 @@
 <script lang="ts">
-	// This fake data will later be replaced with real data fetched from the external API/database model.
+	import { clients } from '$lib/stores/clientStore';
+
+	// Categories from unique_categories.txt
 	interface Recommendation {
 		id: number;
 		field: string;
-		rating: 'A' | 'B' | 'C' | 'D' | 'E';
 		score: number;
 		spendVolume: string;
+		// Which risk/value segments gravitate to this category
+		riskAffinityMin: number;
+		riskAffinityMax: number;
+		valueAffinityMin: number;
+		valueAffinityMax: number;
 	}
 
-	const recommendations: Recommendation[] = [
-		{ id: 1, field: 'Gasoline / EV Charging', rating: 'A', score: 98, spendVolume: '€4.2M/mo' },
-		{ id: 2, field: 'Supermarkets', rating: 'A', score: 96, spendVolume: '€3.8M/mo' },
-		{ id: 3, field: 'Restaurants & Dining', rating: 'A', score: 92, spendVolume: '€2.9M/mo' },
-		{ id: 4, field: 'Online Retail', rating: 'B', score: 88, spendVolume: '€2.4M/mo' },
-		{ id: 5, field: 'Telecommunications', rating: 'B', score: 86, spendVolume: '€1.9M/mo' },
-		{ id: 6, field: 'Healthcare & Pharmacy', rating: 'B', score: 81, spendVolume: '€1.7M/mo' },
-		{ id: 7, field: 'Airlines & Travel', rating: 'B', score: 79, spendVolume: '€1.5M/mo' },
-		{ id: 8, field: 'Utility Providers', rating: 'B', score: 76, spendVolume: '€1.4M/mo' },
-		{ id: 9, field: 'Apparel & Clothing', rating: 'C', score: 72, spendVolume: '€1.2M/mo' },
-		{ id: 10, field: 'Hardware & Electronics', rating: 'C', score: 68, spendVolume: '€1.1M/mo' },
-		{ id: 11, field: 'Fitness & Gyms', rating: 'C', score: 65, spendVolume: '€950k/mo' },
-		{ id: 12, field: 'Home & Gardening', rating: 'C', score: 61, spendVolume: '€890k/mo' },
-		{ id: 13, field: 'Digital Streaming', rating: 'C', score: 58, spendVolume: '€840k/mo' },
-		{ id: 14, field: 'Public Transit', rating: 'D', score: 52, spendVolume: '€610k/mo' },
-		{ id: 15, field: 'Coffee Shops', rating: 'D', score: 49, spendVolume: '€550k/mo' },
-		{ id: 16, field: 'Pet Supplies', rating: 'D', score: 46, spendVolume: '€490k/mo' },
-		{ id: 17, field: 'Cosmetics & Beauty', rating: 'D', score: 42, spendVolume: '€410k/mo' },
-		{ id: 18, field: 'Auto Maintenance', rating: 'E', score: 38, spendVolume: '€320k/mo' },
-		{ id: 19, field: 'Gaming & Software', rating: 'E', score: 35, spendVolume: '€290k/mo' },
-		{ id: 20, field: 'Fast Food', rating: 'E', score: 31, spendVolume: '€220k/mo' },
-		{ id: 21, field: 'Education / Tutors', rating: 'E', score: 28, spendVolume: '€180k/mo' },
-		{ id: 22, field: 'Ride Sharing', rating: 'E', score: 24, spendVolume: '€150k/mo' },
-		{ id: 23, field: 'Toys & Hobbies', rating: 'E', score: 21, spendVolume: '€120k/mo' }
+	const categories = [
+		'JAVNA UPRAVA I OBRANA',
+		'DJELATNOSTI ZDRAVSTVENE ZAŠTITE I SOCIJALNE SKRBI',
+		'DJELATNOSTI PRUŽANJA SMJEŠTAJA TE PRIPREME I USLUŽIVANJA HRANE',
+		'INFORMACIJE I KOMUNIKACIJE',
+		'OPSKRBA VODOM',
+		'FINANCIJSKE DJELATNOSTI I DJELATNOSTI OSIGURANJA',
+		'OPSKRBA ELEKTRIČNOM ENERGIJOM, PLINOM, PAROM I KLIMATIZACIJA',
+		'PRERAĐIVAČKA INDUSTRIJA',
+		'TRGOVINA NA VELIKO I NA MALO',
+		'UMJETNOST, ZABAVA I REKREACIJA',
+		'GRAĐEVINARSTVO',
+		'POLJOPRIVREDA, ŠUMARSTVO I RIBARSTVO',
+		'POSLOVANJE NEKRETNINAMA',
+		'ADMINISTRATIVNE I POMOČNE USLUŽNE DJELATNOSTI',
+		'STRUČNE, ZNANSTVENE I TEHNIČKE DJELATNOSTI',
+		'OSTALE USLUŽNE DJELATNOSTI',
+		'OBRAZOVANJE',
+		'PRIJEVOZ I SKLADIŠTENJE',
+		'PROIZVODNJA SVJEŽIH PECIVA I SLIČNIH PROIZVODA TE KOLAĆA',
+		'Professional services and membership organizations',
+		'Retail outlets',
+		'Miscellaneous outlets',
+		'Utilities',
+		'Service providers',
+		'Clothing outlets',
+		'Repair services',
+		'Transportation',
+		'Amusement and entertainment',
+		'Business services',
+		'Contracted services',
+		'Government services',
+		'Agricultural services'
 	];
 
-	function getRatingColor(rating: string) {
+	// Seed-based pseudo-random so values stay stable across renders
+	function seededRandom(seed: number): number {
+		const x = Math.sin(seed * 9301 + 49297) * 49297;
+		return x - Math.floor(x);
+	}
+
+	const recommendations: Recommendation[] = categories.map((cat, i) => {
+		const s1 = seededRandom(i + 1);
+		const s2 = seededRandom(i + 100);
+		const s3 = seededRandom(i + 200);
+		const s4 = seededRandom(i + 300);
+
+		const rMin = Math.floor(s1 * 60);
+		const rMax = rMin + 20 + Math.floor(s2 * 30);
+		const vMin = Math.floor(s3 * 60);
+		const vMax = vMin + 20 + Math.floor(s4 * 30);
+
+		const score = 30 + Math.floor(seededRandom(i + 500) * 70);
+		const spendBase = 100 + Math.floor(seededRandom(i + 600) * 4000);
+		const spendStr =
+			spendBase >= 1000 ? `€${(spendBase / 1000).toFixed(1)}M/mo` : `€${spendBase}k/mo`;
+
+		return {
+			id: i + 1,
+			field: cat,
+			score,
+			spendVolume: spendStr,
+			riskAffinityMin: Math.min(rMin, 80),
+			riskAffinityMax: Math.min(rMax, 100),
+			valueAffinityMin: Math.min(vMin, 80),
+			valueAffinityMax: Math.min(vMax, 100)
+		};
+	});
+
+	// Filter state
+	type FilterMode = 'all' | 'risk' | 'value';
+
+	let activeFilters = $state<Set<FilterMode>>(new Set(['all']));
+	let riskMin = $state(0);
+	let riskMax = $state(100);
+	let valueMin = $state(0);
+	let valueMax = $state(100);
+
+	function toggleFilter(mode: FilterMode) {
+		if (mode === 'all') {
+			// "View All" is exclusive — selecting it clears risk/value
+			activeFilters = new Set(['all']);
+			riskMin = 0;
+			riskMax = 100;
+			valueMin = 0;
+			valueMax = 100;
+		} else {
+			// Remove 'all' if a specific filter is toggled
+			const next = new Set(activeFilters);
+			next.delete('all');
+			if (next.has(mode)) {
+				next.delete(mode);
+			} else {
+				next.add(mode);
+			}
+			// If nothing is left, revert to 'all'
+			if (next.size === 0) {
+				activeFilters = new Set(['all']);
+			} else {
+				activeFilters = next;
+			}
+		}
+	}
+
+	function isActive(mode: FilterMode): boolean {
+		return activeFilters.has(mode);
+	}
+
+	// Determine which clients match the active risk/value ranges
+	let matchingClientCount = $derived.by(() => {
+		if (activeFilters.has('all')) return $clients.length;
+		return $clients.filter((c) => {
+			const riskOk = !activeFilters.has('risk') || (c.riskScore >= riskMin && c.riskScore <= riskMax);
+			const valOk =
+				!activeFilters.has('value') || (c.valueScore >= valueMin && c.valueScore <= valueMax);
+			return riskOk && valOk;
+		}).length;
+	});
+
+	// Assign letter rating based on score
+	function getRating(score: number): 'A' | 'B' | 'C' | 'D' | 'E' {
+		if (score >= 85) return 'A';
+		if (score >= 70) return 'B';
+		if (score >= 55) return 'C';
+		if (score >= 40) return 'D';
+		return 'E';
+	}
+
+	function getRatingColor(rating: string): string {
 		switch (rating) {
 			case 'A':
 				return 'bg-emerald-50 text-emerald-700 border-emerald-300';
@@ -51,14 +159,24 @@
 		}
 	}
 
-	let selectedTier = $state('All');
-	const tiers = ['All', 'A', 'B', 'C', 'D', 'E'];
-
-	let filteredRecommendations = $derived(
-		selectedTier === 'All'
-			? recommendations
-			: recommendations.filter((r) => r.rating === selectedTier)
-	);
+	// Filtered recommendations: if a filter is active, show categories
+	// whose affinity range overlaps with the selected client range.
+	// Always sorted by score descending (A first, E last).
+	let filteredRecommendations = $derived.by(() => {
+		let result =
+			activeFilters.has('all')
+				? [...recommendations]
+				: recommendations.filter((rec) => {
+						const riskOk =
+							!activeFilters.has('risk') ||
+							(rec.riskAffinityMax >= riskMin && rec.riskAffinityMin <= riskMax);
+						const valOk =
+							!activeFilters.has('value') ||
+							(rec.valueAffinityMax >= valueMin && rec.valueAffinityMin <= valueMax);
+						return riskOk && valOk;
+					});
+		return result.sort((a, b) => b.score - a.score);
+	});
 </script>
 
 <svelte:head>
@@ -71,79 +189,123 @@
 			Contract Partnerships
 		</h1>
 		<p class="mt-2 text-[11px] font-bold tracking-widest text-red-500 uppercase">
-			Top recommended sectors for merchant contracting based on client spend volume.
+			Top recommended sectors for merchant contracting based on client spending volume.
 		</p>
 	</div>
 
-	<!-- Stats & Insight Summary -->
-	<div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-		<div class="flex items-center justify-between rounded-none border border-red-100 bg-white p-5">
-			<div>
-				<span class="mb-1 block text-[10px] font-bold tracking-widest text-red-500 uppercase"
-					>Total Analyzed</span
-				>
-				<span class="text-2xl font-extrabold text-red-950">23 Fields</span>
-			</div>
-			<div
-				class="flex h-10 w-10 items-center justify-center border border-red-100 bg-red-50 font-bold text-red-600"
+	<!-- Filter Controls (replaces old stats cards area) -->
+	<div class="mb-8 rounded-none border border-red-100 bg-white p-5" id="recommendation-filters">
+		<div class="mb-4 flex items-center justify-between border-b border-red-100 pb-3">
+			<h2 class="m-0 text-[11px] font-bold tracking-widest text-red-950 uppercase">
+				Filter Mode
+			</h2>
+			<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase">
+				{matchingClientCount} clients matched · {filteredRecommendations.length} sectors shown
+			</span>
+		</div>
+
+		<!-- Three filter toggle buttons -->
+		<div class="mb-5 flex flex-wrap gap-3">
+			<button
+				onclick={() => toggleFilter('all')}
+				class="border px-5 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-200 {isActive(
+					'all'
+				)
+					? 'border-red-600 bg-red-600 text-white shadow-md'
+					: 'border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50'}"
+				id="filter-view-all"
 			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-					><path
-						stroke-linecap="square"
-						stroke-linejoin="miter"
-						stroke-width="2"
-						d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-					></path></svg
-				>
-			</div>
+				View All
+			</button>
+			<button
+				onclick={() => toggleFilter('risk')}
+				class="border px-5 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-200 {isActive(
+					'risk'
+				)
+					? 'border-red-600 bg-red-600 text-white shadow-md'
+					: 'border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50'}"
+				id="filter-risk-score"
+			>
+				By Risk Score
+			</button>
+			<button
+				onclick={() => toggleFilter('value')}
+				class="border px-5 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-200 {isActive(
+					'value'
+				)
+					? 'border-red-600 bg-red-600 text-white shadow-md'
+					: 'border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50'}"
+				id="filter-value-score"
+			>
+				By Value Score
+			</button>
 		</div>
-		<div
-			class="flex items-center justify-between rounded-none border border-emerald-100 bg-white p-5"
-		>
-			<div>
-				<span class="mb-1 block text-[10px] font-bold tracking-widest text-emerald-500 uppercase"
-					>Highest Priority</span
+
+		<!-- Risk Score range (visible when risk filter active) -->
+		{#if isActive('risk')}
+			<div
+				class="mb-4 flex flex-wrap items-center gap-3 border-t border-red-50 pt-4"
+				id="risk-range"
+			>
+				<span class="text-[10px] font-bold tracking-widest text-red-900/70 uppercase"
+					>Risk Score Range:</span
 				>
-				<span class="border-b-2 border-emerald-300 text-2xl font-extrabold text-emerald-900"
-					>Class A</span
-				>
+				<div class="flex items-center gap-1.5">
+					<input
+						id="rec-risk-min"
+						type="number"
+						min="0"
+						max="100"
+						bind:value={riskMin}
+						class="w-20 rounded-none border border-red-200 bg-white px-2 py-1.5 text-center text-xs text-red-950 focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+					/>
+					<span class="text-xs font-bold text-red-300">—</span>
+					<input
+						id="rec-risk-max"
+						type="number"
+						min="0"
+						max="100"
+						bind:value={riskMax}
+						class="w-20 rounded-none border border-red-200 bg-white px-2 py-1.5 text-center text-xs text-red-950 focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="flex items-center justify-between rounded-none border border-red-100 bg-white p-5">
-			<div>
-				<span class="mb-1 block text-[10px] font-bold tracking-widest text-red-500 uppercase"
-					>Next Recalc</span
+		{/if}
+
+		<!-- Value Score range (visible when value filter active) -->
+		{#if isActive('value')}
+			<div class="flex flex-wrap items-center gap-3 border-t border-red-50 pt-4" id="value-range">
+				<span class="text-[10px] font-bold tracking-widest text-red-900/70 uppercase"
+					>Value Score Range:</span
 				>
-				<span class="text-lg font-bold tracking-widest text-red-950 uppercase">In 14 Days</span>
+				<div class="flex items-center gap-1.5">
+					<input
+						id="rec-value-min"
+						type="number"
+						min="0"
+						max="100"
+						bind:value={valueMin}
+						class="w-20 rounded-none border border-red-200 bg-white px-2 py-1.5 text-center text-xs text-red-950 focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+					/>
+					<span class="text-xs font-bold text-red-300">—</span>
+					<input
+						id="rec-value-max"
+						type="number"
+						min="0"
+						max="100"
+						bind:value={valueMax}
+						class="w-20 rounded-none border border-red-200 bg-white px-2 py-1.5 text-center text-xs text-red-950 focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+					/>
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 
-	<!-- Filter & Controls -->
-	<div
-		class="mb-6 flex flex-col items-start justify-between border-b border-red-100 pb-4 md:flex-row md:items-center"
-	>
-		<h2 class="m-0 mb-4 text-[11px] font-bold tracking-widest text-red-950 uppercase md:mb-0">
+	<!-- Section heading -->
+	<div class="mb-6 border-b border-red-100 pb-4">
+		<h2 class="m-0 text-[11px] font-bold tracking-widest text-red-950 uppercase">
 			Partnership Targets
 		</h2>
-		<div class="flex items-center gap-3">
-			<span class="text-[10px] font-bold tracking-widest text-red-500 uppercase"
-				>Filter Class:</span
-			>
-			<div class="flex border border-red-200 bg-white">
-				{#each tiers as tier}
-					<button
-						onclick={() => (selectedTier = tier)}
-						class="border-r border-red-100 px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-colors last:border-r-0 {selectedTier ===
-						tier
-							? 'bg-red-600 text-white'
-							: 'text-red-600 hover:bg-red-50'}"
-					>
-						{tier}
-					</button>
-				{/each}
-			</div>
-		</div>
 	</div>
 
 	<!-- Recommendations Grid -->
@@ -154,12 +316,10 @@
 			>
 				<!-- Rating Header -->
 				<div
-					class="p-3 {getRatingColor(
-						rec.rating
-					)} flex items-center justify-between border-b transition-colors"
+					class="p-3 {getRatingColor(getRating(rec.score))} flex items-center justify-between border-b transition-colors"
 				>
 					<span class="text-[10px] font-bold tracking-widest uppercase">Partnership Rating</span>
-					<span class="text-2xl leading-none font-black">{rec.rating}</span>
+					<span class="text-2xl leading-none font-black">{getRating(rec.score)}</span>
 				</div>
 
 				<!-- Content Body -->
@@ -174,14 +334,13 @@
 					</div>
 
 					<div class="pt-2">
+						<!-- Score progress bar -->
 						<div class="mb-1 flex items-end justify-between">
 							<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase"
-								>Model Score</span
+								>Confidence</span
 							>
-							<span class="text-lg font-bold text-red-900">{rec.score}</span>
+							<span class="text-lg font-bold text-red-900">{rec.score}%</span>
 						</div>
-
-						<!-- Score progress bar visualization -->
 						<div class="mb-3 h-[4px] w-full overflow-hidden border border-red-100 bg-red-50">
 							<div class="h-full bg-red-500 transition-all" style="width: {rec.score}%"></div>
 						</div>
@@ -200,4 +359,12 @@
 			</div>
 		{/each}
 	</div>
+
+	{#if filteredRecommendations.length === 0}
+		<div class="py-16 text-center">
+			<p class="text-sm font-bold tracking-widest text-red-300 uppercase">
+				No sectors match the current filter criteria.
+			</p>
+		</div>
+	{/if}
 </div>

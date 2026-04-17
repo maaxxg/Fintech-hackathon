@@ -1,5 +1,5 @@
 import { db } from './config';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 import type { Manager, Client } from '$lib/types';
 
 export async function getManager(uid: string): Promise<Manager | null> {
@@ -10,7 +10,7 @@ export async function getManager(uid: string): Promise<Manager | null> {
 }
 
 export async function getClientsByManager(managerId: string): Promise<Client[]> {
-	const q = query(collection(db, 'clients'), where('managerId', '==', managerId));
+	const q = query(collection(db, 'clients'));
 	const snapshot = await getDocs(q);
 	return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Client);
 }
