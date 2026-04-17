@@ -213,24 +213,3 @@ def get_ranked_offers(
     return ranked_offers
 
 
-# ---------------------------------------------------------------------------
-# CLI / quick test
-# ---------------------------------------------------------------------------
-if __name__ == "__main__":
-    import sys
-    import json
-
-    if len(sys.argv) < 2:
-        print("Usage: python offer_recommender.py <CLIENT_ID> [top_n]")
-        sys.exit(1)
-
-    cid = sys.argv[1]
-    n   = int(sys.argv[2]) if len(sys.argv) > 2 else None
-
-    results = get_ranked_offers(cid, top_n=n)
-
-    if not results:
-        print(f"No offers found for client '{cid}'.")
-    else:
-        print(f"Ranked offers for client '{cid}' ({len(results)} total):\n")
-        print(json.dumps(results, ensure_ascii=False, indent=2))
