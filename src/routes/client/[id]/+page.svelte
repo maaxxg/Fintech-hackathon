@@ -8,11 +8,38 @@
 	import ScoreBadge from '$lib/components/ScoreBadge.svelte';
 	import RetentionCard from '$lib/components/RetentionCard.svelte';
 	import type { Client, RetentionMethod } from '$lib/types';
+	import { computePriority, type PriorityAction, type PriorityResult } from '$lib/priority';
 
 	let client = $state<Client | null>(null);
 	let retentionMethods = $state<RetentionMethod[]>([]);
 	let loading = $state(true);
 	let showValueDetails = $state(false);
+	let priority = $state<PriorityResult | null>(null);
+
+	// Priority action banner config
+	const actionLabel: Record<PriorityAction, string> = {
+		high_priority_retention: 'High Priority Retention',
+		let_go: 'Let Go',
+		monitor_high_value: 'Monitor High Value',
+		nurture: 'Nurture',
+		no_action: 'No Action'
+	};
+
+	const actionBannerClass: Record<PriorityAction, string> = {
+		high_priority_retention: 'bg-red-600 text-white border-red-700',
+		let_go: 'bg-gray-100 text-gray-600 border-gray-300',
+		monitor_high_value: 'bg-amber-50 text-amber-800 border-amber-300',
+		nurture: 'bg-green-50 text-green-800 border-green-300',
+		no_action: 'bg-white text-red-300 border-red-100'
+	};
+
+	// Value tier badge config
+	function getValueTier(score: number): { label: string; cls: string } {
+		if (score >= 90) return { label: 'Platinum', cls: 'bg-cyan-50 text-cyan-700 border-cyan-400/30' };
+		if (score >= 70) return { label: 'Gold', cls: 'bg-yellow-50 text-yellow-700 border-yellow-500/30' };
+		if (score >= 40) return { label: 'Silver', cls: 'bg-slate-50 text-slate-600 border-slate-300/40' };
+		return { label: 'Bronze', cls: 'bg-amber-50 text-amber-800 border-amber-700/20' };
+	}
 
 	let additionalDetails = $derived(
 		client
@@ -86,7 +113,10 @@
 	onMount(async () => {
 		const clientId = $page.params.id as string;
 		client = await getClient(clientId);
-		retentionMethods = await getRetentionMethods(clientId);
+		if (client) {
+			priority = computePriority(client.riskScore, client.valueScore);
+			retentionMethods = await getRetentionMethods(clientId);
+		}
 		loading = false;
 	});
 </script>
@@ -124,6 +154,24 @@
 			</div>
 		</div>
 
+		<!-- Priority Action Banner -->
+		{#if priority}
+			<div
+				class="mb-6 flex items-center justify-between rounded-none border px-5 py-3 {actionBannerClass[priority.action]}"
+				id="priority-banner"
+			>
+				<div class="flex items-center gap-3">
+					<span class="text-xs font-bold tracking-widest uppercase">Priority Action</span>
+					<span class="border-l border-current/30 pl-3 text-sm font-extrabold tracking-widest uppercase">
+						{actionLabel[priority.action]}
+					</span>
+				</div>
+				<span class="font-mono text-xs font-bold tracking-widest uppercase opacity-70">
+					Score: {(priority.priorityScore * 100).toFixed(0)}
+				</span>
+			</div>
+		{/if}
+
 		<!-- Strategic Overview (Scores & Actions) -->
 		<div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
 			<!-- Scores Side -->
@@ -150,9 +198,20 @@
 				<!-- Value Score -->
 				<div class="rounded-none border border-red-100 bg-white p-5 shadow-none">
 					<div class="mb-1 flex items-center justify-between">
-						<h2 class="m-0 text-xs font-bold tracking-widest text-red-950 uppercase">
-							Value Assessment
-						</h2>
+						<div class="flex items-center gap-2">
+							<h2 class="m-0 text-xs font-bold tracking-widest text-red-950 uppercase">
+								Value Assessment
+							</h2>
+							{#if client.valueScore !== undefined}
+								{@const tier = getValueTier(client.valueScore)}
+								<span
+									class="inline-flex items-center rounded-none border px-1.5 py-0.5 text-[10px] font-bold tracking-widest uppercase {tier.cls}"
+									id="value-tier-badge"
+								>
+									{tier.label}
+								</span>
+							{/if}
+						</div>
 						<ScoreBadge label="" score={client.valueScore} />
 					</div>
 					<div class="mt-2 mb-3 h-1.5 w-full rounded-none bg-red-50">
@@ -184,25 +243,25 @@
 									<span class="block text-xs font-bold tracking-widest text-amber-800 uppercase"
 										>Bronze</span
 									>
-									<span class="text-sm font-bold text-amber-900">[0, 0.33]</span>
+									<span class="text-sm font-bold text-amber-900">[0, 40)</span>
 								</div>
 								<div class="px-2.9 border border-slate-300/40 bg-slate-50 py-2 text-center">
 									<span class="block text-xs font-bold tracking-widest text-slate-600 uppercase"
 										>Silver</span
 									>
-									<span class="text-sm font-bold text-slate-800">(0.33, 0.50]</span>
+									<span class="text-sm font-bold text-slate-800">[40, 70)</span>
 								</div>
 								<div class="border border-yellow-500/30 bg-yellow-50 px-3 py-2 text-center">
 									<span class="block text-xs font-bold tracking-widest text-yellow-700 uppercase"
 										>Gold</span
 									>
-									<span class="text-sm font-bold text-yellow-800">(0.50, 0.71]</span>
+									<span class="text-sm font-bold text-yellow-800">[70, 90)</span>
 								</div>
 								<div class="border border-cyan-400/30 bg-cyan-50 px-3 py-2 text-center">
 									<span class="block text-xs font-bold tracking-widest text-cyan-700 uppercase"
 										>Platinum</span
 									>
-									<span class="text-sm font-bold text-cyan-800">(0.71, 1.00]</span>
+									<span class="text-sm font-bold text-cyan-800">[90, 100]</span>
 								</div>
 							</div>
 
@@ -255,8 +314,11 @@
 							d="M13 10V3L4 14h7v7l9-11h-7z"
 						></path></svg
 					>
-					Required Actions
+					Personalized Offers
 				</h2>
+				<p class="mb-3 text-[10px] font-bold tracking-widest text-rose-400 uppercase">
+					Here are the personalized cashback offers for this client
+				</p>
 				<div class="space-y-4">
 					{#each retentionMethods as method}
 						<RetentionCard {method} />
@@ -264,7 +326,7 @@
 						<div
 							class="flex items-center justify-center py-6 text-[10px] font-bold tracking-widest uppercase text-rose-400"
 						>
-							No current required actions.
+							No offers available.
 						</div>
 					{/each}
 				</div>

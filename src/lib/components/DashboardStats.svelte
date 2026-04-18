@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { filteredClients } from '$lib/stores/clientStore';
+	import { computePriority } from '$lib/priority';
 
 	let totalClients = $derived($filteredClients.length);
 	let avgRisk = $derived(
@@ -12,7 +13,11 @@
 			? Math.round($filteredClients.reduce((sum, c) => sum + c.valueScore, 0) / totalClients)
 			: 0
 	);
-	let highRisk = $derived($filteredClients.filter((c) => c.riskScore >= 70).length);
+	let priorityRetention = $derived(
+		$filteredClients.filter(
+			(c) => computePriority(c.riskScore, c.valueScore).action === 'high_priority_retention'
+		).length
+	);
 </script>
 
 <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4" id="dashboard-stats">
@@ -34,10 +39,10 @@
 		>
 		<span class="text-2xl font-extrabold text-red-950">{avgValue}</span>
 	</div>
-	<div class="rounded-none border border-red-100 bg-white p-4">
-		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-500 uppercase"
-			>High Risk</span
+	<div class="rounded-none border border-red-600 bg-red-600 p-4">
+		<span class="mb-1 block text-[11px] font-bold tracking-widest text-red-100 uppercase"
+			>Priority Retention</span
 		>
-		<span class="text-2xl font-extrabold text-red-950">{highRisk}</span>
+		<span class="text-2xl font-extrabold text-white">{priorityRetention}</span>
 	</div>
 </div>

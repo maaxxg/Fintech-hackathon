@@ -21,3 +21,9 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Secrets
+fintech-hackathon-2-firebase-adminsdk-fbsvc-5e5a462a40.json
+
+# Jupyter
+.ipynb_checkpoints/

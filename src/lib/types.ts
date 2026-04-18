@@ -23,10 +23,16 @@ export interface Client {
 	[key: string]: any;
 }
 
-// Retention method from external API
+// Personalized cashback offer from external API
 export interface RetentionMethod {
 	title: string;
 	description: string;
+	reason: string;
+	percentage: number;
+	expectedMonthlyCashback: number;
+	durationMonths: number;
+	offerId: string;
+	minMonthlySpend: number;
 	priority: 'high' | 'medium' | 'low';
 }
 

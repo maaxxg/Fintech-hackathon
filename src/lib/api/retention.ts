@@ -1,44 +1,40 @@
 import type { RetentionMethod } from '$lib/types';
 
-/**
- * Fetch suggested retention methods for a client.
- * Replace the mock with the real API URL once the API team provides it.
- */
-const API_BASE_URL: string = 'https://your-api-url.com'; // TODO: replace with real URL
+const API_BASE_URL: string = 'http://localhost:8000';
 
 export async function getRetentionMethods(clientId: string): Promise<RetentionMethod[]> {
 	try {
-		const res = await fetch(`${API_BASE_URL}/api/retention?clientId=${clientId}`);
-		if (!res.ok) throw new Error('API error');
+		const res = await fetch(`${API_BASE_URL}/clients/${clientId}/recommend`);
+		if (!res.ok) {
+			console.warn(`Retention API returned ${res.status} for client ${clientId}`);
+			return [];
+		}
 		const data = await res.json();
-		return data.methods || [];
+		if (!data.offers || data.offers.length === 0) {
+			return [];
+		}
+		return data.offers.map((offer: {
+			category: string;
+			description: string;
+			reason: string;
+			percentage: number;
+			expected_monthly_cashback: number;
+			duration_months: number;
+			offer_id: string;
+			min_monthly_spend: number;
+		}) => ({
+			title: offer.category.replace(/_/g, ' '),
+			description: offer.description,
+			reason: offer.reason,
+			percentage: offer.percentage,
+			expectedMonthlyCashback: offer.expected_monthly_cashback,
+			durationMonths: offer.duration_months,
+			offerId: offer.offer_id,
+			minMonthlySpend: offer.min_monthly_spend,
+			priority: 'high' as const
+		}));
 	} catch (err) {
-		console.warn('Retention API unavailable, using mock data:', err);
-		// Mock fallback while API is not ready
-		return [
-			{
-				title: 'Personalized Rate Offer',
-				description:
-					'Offer a tailored interest rate increase of 0.25% on their primary savings account to demonstrate value.',
-				priority: 'high'
-			},
-			{
-				title: 'Dedicated Support Line',
-				description:
-					'Assign a dedicated relationship manager with priority phone support to improve service experience.',
-				priority: 'medium'
-			},
-			{
-				title: 'Fee Waiver Package',
-				description:
-					'Waive monthly maintenance fees for the next 12 months as a loyalty incentive.',
-				priority: 'medium'
-			},
-			{
-				title: 'Financial Planning Session',
-				description: 'Offer a complimentary financial planning session to deepen the relationship.',
-				priority: 'low'
-			}
-		];
+		console.warn('Retention API unavailable:', err);
+		return [];
 	}
 }
