@@ -1,6 +1,20 @@
 <script lang="ts">
 	import ClientCard from './ClientCard.svelte';
-	import { filteredClients, clientsLoading } from '$lib/stores/clientStore';
+	import { filteredClients, clientsLoading, filters } from '$lib/stores/clientStore';
+
+	function toggleSort(col: 'risk' | 'value') {
+		filters.update((f) => {
+			if (f.sortBy === col) {
+				return { ...f, sortDir: f.sortDir === 'desc' ? 'asc' : 'desc' };
+			}
+			return { ...f, sortBy: col, sortDir: 'desc' };
+		});
+	}
+
+	function sortIcon(col: 'risk' | 'value'): string {
+		if ($filters.sortBy !== col) return '↕';
+		return $filters.sortDir === 'desc' ? '↓' : '↑';
+	}
 </script>
 
 <div
@@ -18,11 +32,22 @@
 
 	<!-- Column Headers -->
 	<div
-		class="mb-1 grid grid-cols-[1fr_auto_auto] gap-4 border-b border-red-50 px-3 py-1.5 pl-4 text-[10px] font-bold tracking-widest text-red-500 uppercase"
+		class="mb-1 grid grid-cols-[1fr_auto_auto_auto] items-center gap-4 border-b border-red-50 px-3 py-1.5 pl-4 text-[10px] font-bold tracking-widest text-red-500 uppercase"
 	>
 		<div>Entity Name</div>
-		<div class="w-12 text-center">Risk</div>
-		<div class="w-12 text-center">Value</div>
+		<div class="w-16 text-center">Action</div>
+		<button
+			onclick={() => toggleSort('risk')}
+			class="flex w-12 cursor-pointer items-center justify-center gap-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors hover:text-red-800 {$filters.sortBy === 'risk' ? 'text-red-700' : ''}"
+		>
+			Risk <span class="font-mono text-[11px]">{sortIcon('risk')}</span>
+		</button>
+		<button
+			onclick={() => toggleSort('value')}
+			class="flex w-12 cursor-pointer items-center justify-center gap-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors hover:text-red-800 {$filters.sortBy === 'value' ? 'text-red-700' : ''}"
+		>
+			Value <span class="font-mono text-[11px]">{sortIcon('value')}</span>
+		</button>
 	</div>
 
 	{#if $clientsLoading}

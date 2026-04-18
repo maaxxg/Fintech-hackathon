@@ -14,6 +14,25 @@ from ModelToConfig import calculate_dynamic_cashback, _build_category_map, _matc
 OFFER_BY_CATEGORY: dict[str, dict] = {o["category"]: o for o in OFFER_CATALOG}
 _OFFER_TOKENS = _build_category_map(OFFER_CATALOG)
 
+# English category names present in parquet that fuzzy matching can't resolve
+_ENGLISH_CATEGORY_MAP: dict[str, str] = {
+    "Retail outlets":                                        "TRGOVINA_NA_VELIKO_I_NA_MALO",
+    "Clothing outlets":                                      "TRGOVINA_NA_VELIKO_I_NA_MALO",
+    "Repair services":                                       "TRGOVINA_NA_VELIKO_I_NA_MALO",
+    "Transportation":                                        "PRIJEVOZ_I_SKLADISTENJE",
+    "Amusement and entertainment":                           "UMJETNOST_ZABAVA_I_REKREACIJA",
+    "Government services":                                   "JAVNA_UPRAVA_I_OBRANA",
+    "Business services":                                     "STRUCNE_ZNANSTVENE_I_TEHNICKE_DJELATNOSTI",
+    "Professional services and membership organizations":    "STRUCNE_ZNANSTVENE_I_TEHNICKE_DJELATNOSTI",
+    "Agricultural services":                                 "POLJOPRIVREDA_SUMARSTVO_I_RIBARSTVO",
+    "Utilities":                                             "OPSKRBA_ELEKTRICNOM_ENERGIJOM_PLINOM_PAROM_I_KLIMATIZACIJA",
+    "Contracted services":                                   "OSTALE_USLUZNE_DJELATNOSTI",
+    "Miscellaneous outlets":                                 "OSTALE_USLUZNE_DJELATNOSTI",
+    "Service providers":                                     "OSTALE_USLUZNE_DJELATNOSTI",
+    "GRAÐEVINARSTVO":                                        "OSTALE_USLUZNE_DJELATNOSTI",
+    "PRERAÐIVAÈKA INDUSTRIJA":                               "OSTALE_USLUZNE_DJELATNOSTI",
+}
+
 TOP_N = 3
 
 
@@ -59,9 +78,12 @@ def load_scores() -> tuple[pd.DataFrame, dict[str, dict]]:
     """Load cashback scores + per-client value/risk scores."""
     df = pd.read_parquet(PROCESSED_DATA_DIR / "cashback_scores.parquet")
     df = df[df["split"] == "holdout"].copy()
-    df["catalog_category"] = df["KATEGORIJA"].apply(
-        lambda k: _match_category(k, _OFFER_TOKENS)
-    )
+    def _resolve_category(k: str) -> str | None:
+        if k in _ENGLISH_CATEGORY_MAP:
+            return _ENGLISH_CATEGORY_MAP[k]
+        return _match_category(k, _OFFER_TOKENS)
+
+    df["catalog_category"] = df["KATEGORIJA"].apply(_resolve_category)
     client_scores = _load_client_scores()
     return df, client_scores
 
@@ -100,8 +122,6 @@ def recommend(
             continue
 
         monthly_spend = float(row.monthly_spend)
-        if monthly_spend < offer_template["min_monthly_spend"]:
-            continue
 
         seen.add(catalog_cat)
 

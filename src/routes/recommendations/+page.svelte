@@ -30,7 +30,6 @@
 		'POSLOVANJE NEKRETNINAMA',
 		'ADMINISTRATIVNE I POMOČNE USLUŽNE DJELATNOSTI',
 		'STRUČNE, ZNANSTVENE I TEHNIČKE DJELATNOSTI',
-		'OSTALE USLUŽNE DJELATNOSTI',
 		'OBRAZOVANJE',
 		'PRIJEVOZ I SKLADIŠTENJE',
 		'PROIZVODNJA SVJEŽIH PECIVA I SLIČNIH PROIZVODA TE KOLAĆA',
@@ -336,10 +335,11 @@
 					<div class="pt-2">
 						<!-- Score progress bar -->
 						<div class="mb-1 flex items-end justify-between">
-							<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase"
-								>Confidence</span
-							>
-							<span class="text-lg font-bold text-red-900">{rec.score}%</span>
+							<div class="flex flex-col gap-0.5">
+								<span class="text-[10px] font-bold tracking-widest text-red-400 uppercase">Confidence</span>
+								<span class="text-[9px] leading-tight tracking-wide text-red-300 normal-case">Partnership attractiveness based on client spending volume, penetration rate, and segment affinity across the holdout portfolio.</span>
+							</div>
+							<span class="ml-3 shrink-0 text-lg font-bold text-red-900">{rec.score}%</span>
 						</div>
 						<div class="mb-3 h-[4px] w-full overflow-hidden border border-red-100 bg-red-50">
 							<div class="h-full bg-red-500 transition-all" style="width: {rec.score}%"></div>

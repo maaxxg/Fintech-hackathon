@@ -1,6 +1,5 @@
 export type PriorityAction =
 	| 'high_priority_retention'
-	| 'let_go'
 	| 'monitor_high_value'
 	| 'nurture'
 	| 'no_action';
@@ -19,13 +18,11 @@ export function computePriority(riskScore: number, valueScore: number): Priority
 	const priorityScore = (riskScore / 100) * (valueScore / 100);
 
 	let action: PriorityAction;
-	if (riskScore >= 55 && valueScore >= 70) {
+	if (riskScore >= 40 && valueScore >= 40) {
 		action = 'high_priority_retention';
-	} else if (riskScore >= 55 && valueScore < 40) {
-		action = 'let_go';
-	} else if (riskScore >= 30 && valueScore >= 70) {
+	} else if (riskScore >= 20 && valueScore >= 40) {
 		action = 'monitor_high_value';
-	} else if (riskScore < 30 && valueScore >= 70) {
+	} else if (riskScore < 20 && valueScore >= 40) {
 		action = 'nurture';
 	} else {
 		action = 'no_action';

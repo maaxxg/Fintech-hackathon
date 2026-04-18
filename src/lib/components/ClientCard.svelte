@@ -9,7 +9,6 @@
 
 	const actionLabel: Record<PriorityAction, string> = {
 		high_priority_retention: 'Retain',
-		let_go: 'Let Go',
 		monitor_high_value: 'Monitor',
 		nurture: 'Nurture',
 		no_action: 'No Action'
@@ -17,10 +16,9 @@
 
 	const actionClass: Record<PriorityAction, string> = {
 		high_priority_retention: 'bg-red-600 text-white border-red-700',
-		let_go: 'bg-gray-200 text-gray-600 border-gray-300',
 		monitor_high_value: 'bg-amber-100 text-amber-800 border-amber-300',
 		nurture: 'bg-green-100 text-green-800 border-green-300',
-		no_action: 'bg-white text-red-300 border-red-100'
+		no_action: 'bg-white text-gray-400 border-gray-200'
 	};
 </script>
 

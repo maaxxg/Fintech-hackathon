@@ -43,4 +43,7 @@ export interface FilterState {
 	riskMax: number;
 	valueMin: number;
 	valueMax: number;
+	actions: string[]; // empty = show all
+	sortBy: 'risk' | 'value' | 'name' | null;
+	sortDir: 'asc' | 'desc';
 }
